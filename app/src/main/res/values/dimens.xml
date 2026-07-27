@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Общие размеры экрана -->
+
+    <dimen name="screen_horizontal_margin">16dp</dimen>
+    <dimen name="screen_top_margin">24dp</dimen>
+    <dimen name="screen_bottom_margin">40dp</dimen>
+
+    <!-- Общая верхняя панель -->
+
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="header_title_size">22sp</dimen>
+
+    <!-- Визуальное смещение текста заголовка вниз -->
+    <dimen name="header_title_offset">12dp</dimen>
+
+    <!-- Отступ заголовка от стрелки назад -->
+    <dimen name="header_title_margin_start">24dp</dimen>
+
+    <!-- Главный экран -->
+
+    <dimen name="button_spacing">16dp</dimen>
+    <dimen name="button_corner_radius">16dp</dimen>
+
+    <dimen name="button_icon_size">24dp</dimen>
+    <dimen name="button_icon_padding">10dp</dimen>
+
+    <dimen name="main_button_text_size">22sp</dimen>
+
+    <!-- Экран настроек -->
+
+    <dimen name="settings_rows_top_spacing">24dp</dimen>
+    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="settings_text_size">16sp</dimen>
+
+    <dimen name="settings_icon_size">24dp</dimen>
+    <dimen name="settings_back_icon_size">24dp</dimen>
+
+</resources>
