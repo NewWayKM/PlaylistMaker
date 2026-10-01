@@ -38,4 +38,14 @@
     <dimen name="settings_icon_size">24dp</dimen>
     <dimen name="settings_back_icon_size">24dp</dimen>
 
+    <!-- Поле поиска -->
+    <dimen name="search_field_height">36dp</dimen>
+    <dimen name="search_field_margin_top">8dp</dimen>
+    <dimen name="search_field_corner_radius">8dp</dimen>
+    <dimen name="search_field_icon_size">24dp</dimen>
+    <dimen name="search_field_padding_start">36dp</dimen>
+    <dimen name="search_field_padding_end">36dp</dimen>
+    <dimen name="search_field_text_size">16sp</dimen>
+    <dimen name="search_clear_margin_end">8dp</dimen>
+
 </resources>
