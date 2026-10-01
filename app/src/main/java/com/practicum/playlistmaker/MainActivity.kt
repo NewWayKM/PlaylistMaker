@@ -1,24 +1,71 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
-// import androidx.activity.enableEdgeToEdge // спринт 8. Структура проекта
 import androidx.appcompat.app.AppCompatActivity
-// import androidx.core.view.ViewCompat // спринт 8. Структура проекта
-// import androidx.core.view.WindowInsetsCompat // спринт 8. Структура проекта
+import com.google.android.material.button.MaterialButton
+import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity()
 {
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        // enableEdgeToEdge() // спринт 8. Структура проекта
         setContentView(R.layout.activity_main)
-        /* // спринт 8. Структура проекта
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        val mainRoot = findViewById<View>(R.id.mainRoot)
+
+        ViewCompat.setOnApplyWindowInsetsListener(mainRoot)
+        { view, windowInsets ->
+
+            val systemBarsInsets = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+
+            view.setPadding(
+                view.paddingLeft,
+                systemBarsInsets.top,
+                view.paddingRight,
+                systemBarsInsets.bottom
+            )
+
+            windowInsets
         }
-        */
+
+        val searchButton =
+            findViewById<MaterialButton>(R.id.searchButton)
+
+        val mediaLibraryButton =
+            findViewById<MaterialButton>(R.id.mediaLibraryButton)
+
+        val settingsButton =
+            findViewById<MaterialButton>(R.id.settingsButton)
+
+        searchButton.setOnClickListener {
+            val intent = Intent(
+                this,
+                SearchActivity::class.java
+            )
+            startActivity(intent)
+        }
+
+        mediaLibraryButton.setOnClickListener {
+            val intent = Intent(
+                this,
+                MediaLibraryActivity::class.java
+            )
+            startActivity(intent)
+        }
+
+        settingsButton.setOnClickListener {
+            val intent = Intent(
+                this,
+                SettingsActivity::class.java
+            )
+            startActivity(intent)
+        }
     }
 }

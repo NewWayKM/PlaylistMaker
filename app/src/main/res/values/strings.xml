@@ -1,3 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Название приложения -->
+
     <string name="app_name">Playlist Maker</string>
+
+    <!-- Главный экран -->
+
+    <string name="search">Поиск</string>
+    <string name="media_library">Медиатека</string>
+    <string name="settings">Настройки</string>
+
+    <!-- Экран настроек -->
+
+    <string name="settings_title">Настройки</string>
+
+    <string name="dark_theme">Тёмная тема</string>
+
+    <string name="share_app">Поделиться приложением</string>
+
+    <string name="write_to_support">Написать в поддержку</string>
+
+    <string name="user_agreement">Пользовательское соглашение</string>
+
+    <!-- ContentDescription -->
+
+    <string name="back_button_description">Вернуться назад</string>
+
+    <string name="share_icon_description">Поделиться приложением</string>
+
+    <string name="support_icon_description">Написать в поддержку</string>
+
+    <string name="agreement_icon_description">Открыть пользовательское соглашение</string>
+    <string name="title_hello">Hello, Practicum</string>
+
 </resources>
