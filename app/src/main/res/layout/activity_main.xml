@@ -5,7 +5,7 @@
     android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yp_blue"
+    android:background="@color/main_screen_background"
     android:orientation="vertical">
 
     <TextView
@@ -33,6 +33,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/searchButton"
             style="@style/MainScreenButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/search"
             app:icon="@drawable/ic_search" />
 
@@ -43,6 +46,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mediaLibraryButton"
             style="@style/MainScreenButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/media_library"
             app:icon="@drawable/ic_media" />
 
@@ -53,6 +59,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settingsButton"
             style="@style/MainScreenButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/settings"
             app:icon="@drawable/ic_gears" />
 

@@ -5,7 +5,14 @@
     <color name="screen_background">@color/yp_black</color>
     <color name="primary_text">@color/yp_white</color>
 
+    <color name="main_screen_background">@color/yp_black</color>
+
     <color name="main_button_background">@color/yp_white</color>
     <color name="main_button_content">@color/yp_black</color>
+
+    <!-- Поле поиска -->
+    <color name="search_field_background">@color/yp_white</color>
+    <color name="search_field_text">@color/yp_black</color>
+    <color name="search_field_hint">@color/yp_gray</color>
 
 </resources>

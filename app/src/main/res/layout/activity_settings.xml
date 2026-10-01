@@ -62,6 +62,8 @@
     <TextView
         android:id="@+id/shareAppRow"
         style="@style/SettingsRow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_row_height"
         android:text="@string/share_app"
         app:drawableEndCompat="@drawable/ic_share"
         app:drawableTint="@color/yp_gray" />
@@ -71,6 +73,8 @@
     <TextView
         android:id="@+id/supportRow"
         style="@style/SettingsRow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_row_height"
         android:text="@string/write_to_support"
         app:drawableEndCompat="@drawable/ic_help_group"
         app:drawableTint="@color/yp_gray" />
@@ -80,6 +84,8 @@
     <TextView
         android:id="@+id/userAgreementRow"
         style="@style/SettingsRow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_row_height"
         android:text="@string/user_agreement"
         app:drawableEndCompat="@drawable/ic_arrow_right"
         app:drawableTint="@color/yp_gray" />

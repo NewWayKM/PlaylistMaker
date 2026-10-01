@@ -10,7 +10,7 @@ import android.content.Intent
 import androidx.core.net.toUri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
-
+import android.content.res.Configuration
 
 class SettingsActivity : AppCompatActivity()
 {
@@ -48,6 +48,12 @@ class SettingsActivity : AppCompatActivity()
 
         val darkThemeSwitch =
             findViewById<SwitchCompat>(R.id.darkThemeSwitch)
+
+        val isDarkTheme =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                    Configuration.UI_MODE_NIGHT_YES
+
+        darkThemeSwitch.isChecked = isDarkTheme
 
         darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
 

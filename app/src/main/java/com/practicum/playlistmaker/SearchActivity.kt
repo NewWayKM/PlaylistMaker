@@ -2,14 +2,14 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import android.view.View
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doOnTextChanged
+import androidx.core.view.isVisible
 
 class SearchActivity : AppCompatActivity()
 {
@@ -30,34 +30,11 @@ class SearchActivity : AppCompatActivity()
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
 
-        clearButton.visibility = View.GONE
-
-        searchEditText.addTextChangedListener(object : TextWatcher {
-
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-
-                searchText = s.toString()
-
-                clearButton.visibility =
-                    if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        clearButton.isVisible = false
+        searchEditText.doOnTextChanged { text, _, _, _ ->
+            searchText = text.toString()
+            clearButton.isVisible = !text.isNullOrEmpty()
+        }
 
         clearButton.setOnClickListener {
 
