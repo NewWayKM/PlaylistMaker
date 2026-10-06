@@ -14,6 +14,7 @@
     <!-- Цвета, зависящие от темы -->
     <color name="screen_background">@color/yp_white</color>
     <color name="primary_text">@color/yp_black</color>
+    <color name="secondary_text">@color/yp_gray</color>
     <color name="main_screen_background">@color/yp_blue</color>
 
     <!-- Кнопки главного экрана -->

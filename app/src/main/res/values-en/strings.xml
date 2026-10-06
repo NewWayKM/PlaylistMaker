@@ -14,4 +14,13 @@
     <string name="share_icon_description">Share</string>
     <string name="support_icon_description">Write to support</string>
     <string name="agreement_icon_description">Open the User Agreement</string>
+
+    <!-- Обращение в поддержку -->
+
+    <string name="support_email_subject">Message to the developers of the Playlist Maker app</string>
+    <string name="support_email_body">Thanks to the developers for the great app!</string>
+
+    <!-- Описание элементов -->
+
+    <string name="clear_search_description">Clear search query</string>
 </resources>

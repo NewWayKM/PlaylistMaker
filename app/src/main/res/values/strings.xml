@@ -20,7 +20,7 @@
     <string name="dark_theme">Тёмная тема</string>
 
     <string name="share_app">Поделиться приложением</string>
-    <string name="share_message">https://practicum.yandex.ru/android-developer/</string>
+    <string name="share_message" translatable="false">https://practicum.yandex.ru/android-developer/</string>
 
     <string name="write_to_support">Написать в поддержку</string>
 
@@ -28,13 +28,13 @@
 
     <!-- Обращение в поддержку -->
 
-    <string name="support_email">prones@yandex.ru</string>
+    <string name="support_email" translatable="false">prones@yandex.ru</string>
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_email_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
 
     <!-- Пользовательское соглашение -->
 
-    <string name="user_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="user_agreement_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
 
     <!-- Описание элементов -->
 
@@ -48,5 +48,6 @@
     <string name="title_hello">Hello, Practicum</string>
 
     <string name="clear_search_description">Очистить поисковый запрос</string>
+
 
 </resources>
