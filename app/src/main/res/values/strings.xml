@@ -2,52 +2,53 @@
 <resources>
 
     <!-- Название приложения -->
-
     <string name="app_name">Playlist Maker</string>
 
     <!-- Главный экран -->
-
     <string name="search">Поиск</string>
     <string name="media_library">Медиатека</string>
     <string name="settings">Настройки</string>
 
-
-
     <!-- Экран настроек -->
-
     <string name="settings_title">Настройки</string>
-
     <string name="dark_theme">Тёмная тема</string>
-
     <string name="share_app">Поделиться приложением</string>
-    <string name="share_message" translatable="false">https://practicum.yandex.ru/android-developer/</string>
-
     <string name="write_to_support">Написать в поддержку</string>
-
     <string name="user_agreement">Пользовательское соглашение</string>
 
-    <!-- Обращение в поддержку -->
+    <!-- Поделиться приложением -->
+    <string name="share_message" translatable="false">https://practicum.yandex.ru/android-developer/</string>
 
+    <!-- Обращение в поддержку -->
     <string name="support_email" translatable="false">prones@yandex.ru</string>
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_email_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
 
     <!-- Пользовательское соглашение -->
-
     <string name="user_agreement_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
 
+    <!-- Экран поиска -->
     <!-- Описание элементов -->
 
-    <string name="back_button_description">Вернуться назад</string>
-
-    <string name="share_icon_description">Поделиться приложением</string>
-
-    <string name="support_icon_description">Написать в поддержку</string>
-
-    <string name="agreement_icon_description">Открыть пользовательское соглашение</string>
-    <string name="title_hello">Hello, Practicum</string>
-
+    <!-- Поисковая строка -->
     <string name="clear_search_description">Очистить поисковый запрос</string>
 
+    <!-- Список музыкальных треков -->
+    <string name="track_unknown_name">Без названия</string>
+    <string name="track_unknown_artist">Неизвестный исполнитель</string>
+
+    <!-- Пустой результат поиска -->
+    <string name="search_empty">Ничего не нашлось</string>
+
+    <!-- Ошибка соединения с сервером -->
+    <string name="search_error">Проблемы со связью</string>
+    <string name="search_error_full">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="search_retry">Обновить</string>
+
+    <!-- Описания элементов интерфейса -->
+    <string name="back_button_description">Вернуться назад</string>
+    <string name="share_icon_description">Поделиться приложением</string>
+    <string name="support_icon_description">Написать в поддержку</string>
+    <string name="agreement_icon_description">Открыть пользовательское соглашение</string>
 
 </resources>

@@ -9,7 +9,6 @@
     <color name="yp_gray">#AEAFB4</color>
     <color name="yp_light_gray">#E6E8EB</color>
 
-    <color name="switch_active">#00C9B7</color>
 
     <!-- Цвета, зависящие от темы -->
     <color name="screen_background">@color/yp_white</color>
@@ -25,5 +24,9 @@
     <color name="search_field_background">@color/yp_light_gray</color>
     <color name="search_field_text">@color/yp_black</color>
     <color name="search_field_hint">@color/yp_gray</color>
+
+    <!-- Кнопка «Обновить» на экране ошибки поиска -->
+    <color name="search_retry_background">@color/yp_black</color>
+    <color name="search_retry_text">@color/yp_white</color>
 
 </resources>
