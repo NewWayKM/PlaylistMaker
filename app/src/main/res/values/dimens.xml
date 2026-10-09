@@ -68,6 +68,9 @@
     <dimen name="track_name_top_margin">14dp</dimen>
     <dimen name="track_info_top_margin">1dp</dimen>
 
+    <!-- Отступ между изображением и текстом пустого результата -->
+    <dimen name="search_empty_text_margin_top">24dp</dimen>
+
     <!-- Кнопка «Обновить» на экране ошибки поиска -->
     <dimen name="search_retry_width">91dp</dimen>
     <dimen name="search_retry_height">36dp</dimen>
