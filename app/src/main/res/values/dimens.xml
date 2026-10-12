@@ -2,41 +2,35 @@
 
 <resources>
 
-    <!-- Общие размеры экрана -->
-
+    <!-- 1. Общие размеры экрана -->
+    <!-- 1.1 Отступы экрана -->
     <dimen name="screen_horizontal_margin">16dp</dimen>
     <dimen name="screen_top_margin">24dp</dimen>
 
-    <!-- Общая верхняя панель -->
-
+    <!-- 1.2 Общая верхняя панель -->
     <dimen name="header_height">56dp</dimen>
     <dimen name="header_title_size">22sp</dimen>
-
-    <!-- Визуальное смещение текста заголовка вниз -->
     <dimen name="header_title_offset">12dp</dimen>
-
-    <!-- Отступ заголовка от стрелки назад -->
     <dimen name="header_title_margin_start">24dp</dimen>
 
-    <!-- Главный экран -->
-
+    <!-- 2. Главный экран -->
     <dimen name="button_spacing">16dp</dimen>
     <dimen name="button_corner_radius">16dp</dimen>
-
     <dimen name="button_icon_size">24dp</dimen>
     <dimen name="button_icon_padding">10dp</dimen>
-
     <dimen name="main_button_text_size">22sp</dimen>
 
-    <!-- Экран настроек -->
-
+    <!-- 3. Экран настроек -->
+    <!-- 3.1 Строки настроек -->
     <dimen name="settings_rows_top_spacing">24dp</dimen>
     <dimen name="settings_row_height">61dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
 
+    <!-- 3.2 Кнопка «Назад» -->
     <dimen name="settings_back_icon_size">24dp</dimen>
 
-    <!-- Поле поиска -->
+    <!-- 4. Экран поиска -->
+    <!-- 4.1 Поле поиска -->
     <dimen name="search_field_height">36dp</dimen>
     <dimen name="search_field_margin_top">8dp</dimen>
     <dimen name="search_field_corner_radius">8dp</dimen>
@@ -45,37 +39,41 @@
     <dimen name="search_field_text_size">16sp</dimen>
     <dimen name="search_clear_margin_end">8dp</dimen>
 
-    <!-- Элемент списка треков -->
-
+    <!--4.2 Элемент списка треков -->
     <dimen name="track_list_margin_top">16dp</dimen>
     <dimen name="track_item_height">61dp</dimen>
-
     <dimen name="track_cover_size">45dp</dimen>
     <dimen name="track_cover_corner_radius">2dp</dimen>
-
     <dimen name="track_item_start_margin">13dp</dimen>
     <dimen name="track_cover_text_margin">8dp</dimen>
-
     <dimen name="track_arrow_size">24dp</dimen>
     <dimen name="track_arrow_end_margin">12dp</dimen>
-
     <dimen name="track_name_text_size">16sp</dimen>
-
     <dimen name="track_info_text_size">11sp</dimen>
     <dimen name="track_info_dot_container_size">13dp</dimen>
     <dimen name="track_info_dot_size">3dp</dimen>
-
     <dimen name="track_name_top_margin">14dp</dimen>
     <dimen name="track_info_top_margin">1dp</dimen>
 
-    <!-- Отступ между изображением и текстом пустого результата -->
+    <!-- 4.3 Отступ между изображением и текстом пустого результата -->
     <dimen name="search_empty_text_margin_top">24dp</dimen>
 
-    <!-- Кнопка «Обновить» на экране ошибки поиска -->
+    <!-- 4.4 История поиска -->
+    <dimen name="search_history_margin_top">24dp</dimen>
+    <dimen name="search_history_list_margin_top">8dp</dimen>
+
+    <!-- 4.5 Кнопка «Обновить» на экране ошибки поиска -->
     <dimen name="search_retry_width">91dp</dimen>
     <dimen name="search_retry_height">36dp</dimen>
     <dimen name="search_retry_corner_radius">54dp</dimen>
     <dimen name="search_retry_text_size">14sp</dimen>
     <dimen name="search_retry_margin_top">24dp</dimen>
+
+    <!-- 4.6 Кнопка «Очистить историю» -->
+    <dimen name="search_history_button_width">148dp</dimen>
+    <dimen name="search_history_button_height">36dp</dimen>
+    <dimen name="search_history_button_corner_radius">54dp</dimen>
+    <dimen name="search_history_button_text_size">14sp</dimen>
+    <dimen name="search_history_button_margin_top">24dp</dimen>
 
 </resources>

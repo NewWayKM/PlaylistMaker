@@ -3,14 +3,12 @@ package com.practicum.playlistmaker
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import androidx.core.net.toUri
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SwitchCompat
-import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity()
 {
@@ -47,25 +45,15 @@ class SettingsActivity : AppCompatActivity()
         }
 
         val darkThemeSwitch =
-            findViewById<SwitchCompat>(R.id.darkThemeSwitch)
+            findViewById<SwitchMaterial>(R.id.darkThemeSwitch)
 
-        val isDarkTheme =
-            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
-                    Configuration.UI_MODE_NIGHT_YES
+        val app = application as App
 
-        darkThemeSwitch.isChecked = isDarkTheme
+        darkThemeSwitch.isChecked = app.darkTheme
 
         darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
-
-            AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) {
-                    AppCompatDelegate.MODE_NIGHT_YES
-                } else {
-                    AppCompatDelegate.MODE_NIGHT_NO
-                }
-            )
+            app.switchTheme(isChecked)
         }
-
 
         val shareAppRow = findViewById<View>(R.id.shareAppRow)
 

@@ -2,21 +2,31 @@
 
 <resources>
 
+
+    <!-- 1. Цвета по макету, основные-->
+    <!-- res/values/colors.xml-->
+
+    <!-- 2. Общие цвета тёмной темы-->
     <color name="screen_background">@color/yp_black</color>
     <color name="primary_text">@color/yp_white</color>
 
+    <!-- 3. Главный экран -->
     <color name="main_screen_background">@color/yp_black</color>
-
     <color name="main_button_background">@color/yp_white</color>
     <color name="main_button_content">@color/yp_black</color>
 
-    <!-- Поле поиска -->
+    <!-- 4. Экран поиска -->
+    <!-- 4.1 Поле поиска -->
     <color name="search_field_background">@color/yp_white</color>
     <color name="search_field_text">@color/yp_black</color>
     <color name="search_field_hint">@color/yp_gray</color>
 
-    <!-- Кнопка «Обновить» на экране ошибки поиска -->
+    <!-- 4.2 Кнопка «Обновить» на экране ошибки поиска -->
     <color name="search_retry_background">@color/yp_white</color>
     <color name="search_retry_text">@color/yp_black</color>
+
+    <!-- 4.3 Кнопка очистки истории -->
+    <color name="search_history_button_background">@color/yp_white</color>
+    <color name="search_history_button_text">@color/yp_black</color>
 
 </resources>
