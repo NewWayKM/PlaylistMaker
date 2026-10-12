@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker
 
-class Track (
-    val trackName: String,
-    val artistName: String,
-    val trackTime: String,
-    val artworkUrl100: String
+data class Track(
+    val trackName: String? = null,
+    val artistName: String? = null,
+    val trackTimeMillis: Long? = null,
+    val artworkUrl100: String? = null
 )

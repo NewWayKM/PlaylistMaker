@@ -6,7 +6,6 @@
 
     <dimen name="screen_horizontal_margin">16dp</dimen>
     <dimen name="screen_top_margin">24dp</dimen>
-    <dimen name="screen_bottom_margin">40dp</dimen>
 
     <!-- Общая верхняя панель -->
 
@@ -35,7 +34,6 @@
     <dimen name="settings_row_height">61dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
 
-    <dimen name="settings_icon_size">24dp</dimen>
     <dimen name="settings_back_icon_size">24dp</dimen>
 
     <!-- Поле поиска -->
@@ -69,5 +67,15 @@
 
     <dimen name="track_name_top_margin">14dp</dimen>
     <dimen name="track_info_top_margin">1dp</dimen>
+
+    <!-- Отступ между изображением и текстом пустого результата -->
+    <dimen name="search_empty_text_margin_top">24dp</dimen>
+
+    <!-- Кнопка «Обновить» на экране ошибки поиска -->
+    <dimen name="search_retry_width">91dp</dimen>
+    <dimen name="search_retry_height">36dp</dimen>
+    <dimen name="search_retry_corner_radius">54dp</dimen>
+    <dimen name="search_retry_text_size">14sp</dimen>
+    <dimen name="search_retry_margin_top">24dp</dimen>
 
 </resources>
