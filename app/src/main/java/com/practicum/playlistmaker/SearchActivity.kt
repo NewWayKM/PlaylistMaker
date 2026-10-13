@@ -86,7 +86,7 @@ class SearchActivity : AppCompatActivity()
 
     private fun initSearchHistory() {
         val sharedPreferences = getSharedPreferences(
-            PREFERENCES_NAME,
+            AppConstants.PREFERENCES_NAME,
             MODE_PRIVATE
         )
 
@@ -321,7 +321,6 @@ class SearchActivity : AppCompatActivity()
 
     // 18. Константы
     companion object {
-        private const val PREFERENCES_NAME = "playlist_maker_preferences"
         private const val SEARCH_TEXT = "SEARCH_TEXT"
         private const val LAST_SEARCH_QUERY = "LAST_SEARCH_QUERY"
     }

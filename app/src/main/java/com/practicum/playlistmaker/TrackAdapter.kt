@@ -13,15 +13,21 @@ class TrackAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_track, parent, false)
 
-        return TrackViewHolder(view)
+        val holder = TrackViewHolder(view)
+
+        holder.itemView.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+
+            if (position != RecyclerView.NO_POSITION) {
+                onTrackClick(tracks[position])
+            }
+        }
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = tracks[position]
-        holder.bind(track)
-        holder.itemView.setOnClickListener {
-            onTrackClick(track)
-        }
+        holder.bind(tracks[position])
     }
 
     override fun getItemCount(): Int {

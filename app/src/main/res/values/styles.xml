@@ -74,7 +74,7 @@
 
     <!-- 3.2 Кнопка очистки истории поиска -->
     <style name="SearchHistoryClearButton"
-        parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        parent="SearchRetryButton">
 
         <!-- 3.2.1 Размеры кнопки -->
         <item name="android:layout_width">@dimen/search_history_button_width</item>
@@ -83,11 +83,6 @@
         <!-- 3.2.2 Шрифт и текст -->
         <item name="android:textColor">@color/search_history_button_text</item>
         <item name="android:textSize">@dimen/search_history_button_text_size</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:gravity">center</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:includeFontPadding">false</item>
         <item name="android:lineHeight">16sp</item>
         <item name="android:singleLine">true</item>
 
@@ -95,18 +90,9 @@
         <item name="cornerRadius">@dimen/search_history_button_corner_radius</item>
         <item name="backgroundTint">@color/search_history_button_background</item>
 
-        <!-- 3.2.4 Минимальные размеры -->
-        <item name="android:minWidth">0dp</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
+        <!-- 3.2.4 Минимальные размеры, отступы -->
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
-
-        <!-- 3.2.5 Внутренние отступы -->
-        <item name="iconPadding">0dp</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingEnd">0dp</item>
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
     </style>

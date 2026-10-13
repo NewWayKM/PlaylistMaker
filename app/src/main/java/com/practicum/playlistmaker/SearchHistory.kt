@@ -11,7 +11,7 @@ class SearchHistory(
     private val gson = Gson()
 
     fun read(): ArrayList<Track> {
-        val json = sharedPreferences.getString(HISTORY_KEY, null)
+        val json = sharedPreferences.getString(AppConstants.HISTORY_KEY, null)
             ?: return arrayListOf()
 
         return try {
@@ -34,18 +34,17 @@ class SearchHistory(
         }
 
         sharedPreferences.edit()
-            .putString(HISTORY_KEY, gson.toJson(history))
+            .putString(AppConstants.HISTORY_KEY, gson.toJson(history))
             .apply()
     }
 
     fun clear() {
         sharedPreferences.edit()
-            .remove(HISTORY_KEY)
+            .remove(AppConstants.HISTORY_KEY)
             .apply()
     }
 
     companion object {
-        private const val HISTORY_KEY = "search_history"
         private const val MAX_HISTORY_SIZE = 10
     }
 }
