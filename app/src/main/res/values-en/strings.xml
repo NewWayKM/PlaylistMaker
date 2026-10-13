@@ -24,6 +24,12 @@
     <!-- Поисковая строка -->
     <string name="clear_search_description">Clear search query</string>
 
+    <!-- заголовок «Вы искали» -->
+    <string name="search_history_title">You searched for</string>
+
+    <!-- Кнопка «Очистить историю» -->
+    <string name="clear_history">Clear history</string>
+
     <!-- Список музыкальных треков -->
     <string name="track_unknown_name">Untitled track</string>
     <string name="track_unknown_artist">Unknown artist</string>

@@ -46,7 +46,7 @@
 
     <!-- Тёмная тема -->
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/darkThemeSwitch"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
