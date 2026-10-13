@@ -97,4 +97,31 @@
         <item name="android:paddingBottom">6dp</item>
     </style>
 
+    <!-- 4. Экран аудиоплеера -->
+    <!-- 4.1 Общий стиль текста характеристик трека -->
+    <style name="PlayerInfoText">
+
+        <!-- 4.1.1 Шрифт и размеры текста -->
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/player_info_text_size</item>
+        <item name="android:lineHeight">@dimen/player_info_line_height</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 4.2 Названия характеристик трека -->
+    <style name="PlayerInfoLabel" parent="PlayerInfoText">
+
+        <!-- 4.2.1 Цвет и выравнивание текста -->
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- 4.3 Значения характеристик трека -->
+    <style name="PlayerInfoValue" parent="PlayerInfoText">
+
+        <!-- 4.3.1 Цвет и выравнивание текста -->
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:gravity">end|center_vertical</item>
+    </style>
+
 </resources>

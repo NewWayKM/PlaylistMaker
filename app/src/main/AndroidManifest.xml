@@ -2,8 +2,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- 1. Разрешения приложения -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 2. Общие настройки приложения -->
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -15,25 +17,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker">
 
+        <!-- 3. Экраны приложения -->
+        <!-- 3.1. Экран настроек -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
 
+        <!-- 3.2. Экран медиатеки -->
         <activity
             android:name=".MediaLibraryActivity"
             android:exported="false" />
 
+        <!-- 3.3. Экран поиска -->
         <activity
             android:name=".SearchActivity"
             android:exported="false" />
 
+        <!-- 3.4. Экран аудиоплеера -->
+        <activity
+            android:name=".AudioPlayerActivity"
+            android:exported="false" />
+
+        <!-- 3.5. Главный экран (точка входа) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
