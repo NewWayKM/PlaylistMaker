@@ -3,11 +3,11 @@
 <resources>
 
     <!-- 1. Общие размеры экрана -->
-    <!-- 1.1 Отступы экрана -->
+    <!-- 1.1. Отступы экрана -->
     <dimen name="screen_horizontal_margin">16dp</dimen>
     <dimen name="screen_top_margin">24dp</dimen>
 
-    <!-- 1.2 Общая верхняя панель -->
+    <!-- 1.2. Общая верхняя панель -->
     <dimen name="header_height">56dp</dimen>
     <dimen name="header_title_size">22sp</dimen>
     <dimen name="header_title_offset">12dp</dimen>
@@ -21,16 +21,16 @@
     <dimen name="main_button_text_size">22sp</dimen>
 
     <!-- 3. Экран настроек -->
-    <!-- 3.1 Строки настроек -->
+    <!-- 3.1. Строки настроек -->
     <dimen name="settings_rows_top_spacing">24dp</dimen>
     <dimen name="settings_row_height">61dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
 
-    <!-- 3.2 Кнопка «Назад» -->
+    <!-- 3.2. Кнопка «Назад» -->
     <dimen name="settings_back_icon_size">24dp</dimen>
 
     <!-- 4. Экран поиска -->
-    <!-- 4.1 Поле поиска -->
+    <!-- 4.1. Поле поиска -->
     <dimen name="search_field_height">36dp</dimen>
     <dimen name="search_field_margin_top">8dp</dimen>
     <dimen name="search_field_corner_radius">8dp</dimen>
@@ -39,7 +39,7 @@
     <dimen name="search_field_text_size">16sp</dimen>
     <dimen name="search_clear_margin_end">8dp</dimen>
 
-    <!--4.2 Элемент списка треков -->
+    <!--4.2. Элемент списка треков -->
     <dimen name="track_list_margin_top">16dp</dimen>
     <dimen name="track_item_height">61dp</dimen>
     <dimen name="track_cover_size">45dp</dimen>
@@ -55,26 +55,38 @@
     <dimen name="track_name_top_margin">14dp</dimen>
     <dimen name="track_info_top_margin">1dp</dimen>
 
-    <!-- 4.3 Отступ между изображением и текстом пустого результата -->
+    <!-- 4.3. Отступ между изображением и текстом пустого результата -->
     <dimen name="search_empty_text_margin_top">24dp</dimen>
 
-    <!-- 4.4 История поиска -->
+    <!-- 4.4. История поиска -->
     <dimen name="search_history_margin_top">24dp</dimen>
     <dimen name="search_history_list_margin_top">8dp</dimen>
 
-    <!-- 4.5 Кнопка «Обновить» на экране ошибки поиска -->
+    <!-- 4.5. Кнопка «Обновить» на экране ошибки поиска -->
     <dimen name="search_retry_width">91dp</dimen>
     <dimen name="search_retry_height">36dp</dimen>
     <dimen name="search_retry_corner_radius">54dp</dimen>
     <dimen name="search_retry_text_size">14sp</dimen>
     <dimen name="search_retry_margin_top">24dp</dimen>
 
-    <!-- 4.6 Кнопка «Очистить историю» -->
+    <!-- 4.6. Кнопка «Очистить историю» -->
     <dimen name="search_history_button_width">148dp</dimen>
     <dimen name="search_history_button_height">36dp</dimen>
     <dimen name="search_history_button_corner_radius">54dp</dimen>
     <dimen name="search_history_button_text_size">14sp</dimen>
     <dimen name="search_history_button_margin_top">24dp</dimen>
+
+    <!-- 4.7. Заголовки и сообщения экрана поиска -->
+    <dimen name="search_state_text_size">19sp</dimen>
+
+    <!-- 4.8. Изображения состояний поиска -->
+    <dimen name="search_state_image_size">120dp</dimen>
+
+    <!-- 4.9. Сообщение об ошибке соединения -->
+    <dimen name="search_error_text_width">312dp</dimen>
+    <dimen name="search_error_text_min_height">88dp</dimen>
+    <dimen name="search_error_text_margin_top">16dp</dimen>
+    <dimen name="search_error_line_spacing">3sp</dimen>
 
     <!-- 5. Экран аудиоплеера -->
     <!-- 5.1. Обложка трека -->

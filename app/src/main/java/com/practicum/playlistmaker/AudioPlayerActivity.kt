@@ -48,11 +48,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     // 3. Получение данных выбранного трека
     private fun getTrackFromIntent(): Track? {
-        val trackJson = intent.getStringExtra(EXTRA_TRACK)
-
-        return trackJson?.let {
-            TrackJsonConverter.fromJson(it)
-        }
+        return androidx.core.content.IntentCompat.getParcelableExtra(
+            intent,
+            EXTRA_TRACK,
+            Track::class.java
+        )
     }
 
     // 4. Настройка интерфейса
@@ -179,10 +179,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         fun createIntent(context: Context, track: Track): Intent {
             return Intent(context, AudioPlayerActivity::class.java).apply {
-                putExtra(
-                    EXTRA_TRACK,
-                    TrackJsonConverter.toJson(track)
-                )
+                putExtra(EXTRA_TRACK, track)
             }
         }
     }

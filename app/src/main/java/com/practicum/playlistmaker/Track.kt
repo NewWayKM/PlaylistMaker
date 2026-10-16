@@ -1,5 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Track(
     val trackName: String? = null,
     val artistName: String? = null,
@@ -11,7 +15,7 @@ data class Track(
     val releaseDate: String? = null,
     val primaryGenreName: String? = null,
     val country: String? = null
-) {
+) : Parcelable {
     // 1. Получение обложки высокого разрешения для аудиоплеера
     fun getCoverArtwork(): String? {
         return artworkUrl100
