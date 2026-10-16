@@ -2,7 +2,6 @@
 
 <resources>
 
-
     <!-- 1. Цвета по макету, основные-->
     <!-- res/values/colors.xml-->
 
@@ -28,5 +27,12 @@
     <!-- 4.3 Кнопка очистки истории -->
     <color name="search_history_button_background">@color/yp_white</color>
     <color name="search_history_button_text">@color/yp_black</color>
+
+    <!-- 5. Экран аудиоплеера -->
+    <!-- 5.1. Центральная кнопка Play/Pause -->
+    <color name="player_control_color">@color/yp_white</color>
+
+    <!-- 5.2. Фон боковых кнопок -->
+    <color name="player_side_button_background">@color/yp_white</color>
 
 </resources>

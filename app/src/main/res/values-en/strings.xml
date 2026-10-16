@@ -1,51 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Название приложения -->
+    <!-- 1. Общие ресурсы приложения -->
+    <!-- 1.1. Название приложения -->
     <string name="app_name">Playlist Maker</string>
 
-    <!-- Главный экран -->
+    <!-- 1.2. Общие описания элементов интерфейса -->
+    <string name="back_button_description">Go back</string>
+
+    <!-- 2. Главный экран -->
+    <!-- 2.1. Названия разделов -->
     <string name="search">Search</string>
     <string name="media_library">Media Library</string>
     <string name="settings">Settings</string>
 
-    <!-- Экран настроек -->
+    <!-- 3. Экран настроек -->
+    <!-- 3.1. Названия элементов -->
     <string name="settings_title">Settings</string>
     <string name="dark_theme">Dark Mode</string>
     <string name="share_app">Share</string>
     <string name="write_to_support">Write to support</string>
     <string name="user_agreement">User agreement</string>
 
-    <!-- Обращение в поддержку -->
+    <!-- 3.2. Поделиться приложением -->
+    <string name="share_icon_description">Share</string>
+
+    <!-- 3.3. Обращение в поддержку -->
     <string name="support_email_subject">Message to the developers of the Playlist Maker app</string>
     <string name="support_email_body">Thanks to the developers for the great app!</string>
+    <string name="support_icon_description">Write to support</string>
 
-    <!-- Экран поиска -->
-    <!-- Поисковая строка -->
+    <!-- 3.4. Пользовательское соглашение -->
+    <string name="agreement_icon_description">Open the User Agreement</string>
+
+    <!-- 4. Экран поиска -->
+    <!-- 4.1. Поисковая строка -->
     <string name="clear_search_description">Clear search query</string>
 
-    <!-- заголовок «Вы искали» -->
+    <!-- 4.2. История поиска -->
+    <!-- Заголовок «Вы искали» -->
     <string name="search_history_title">You searched for</string>
-
     <!-- Кнопка «Очистить историю» -->
     <string name="clear_history">Clear history</string>
 
-    <!-- Список музыкальных треков -->
+    <!-- 4.3. Список музыкальных треков -->
     <string name="track_unknown_name">Untitled track</string>
     <string name="track_unknown_artist">Unknown artist</string>
 
-    <!-- Пустой результат поиска -->
+    <!-- 4.4. Пустой результат поиска -->
     <string name="search_empty">Nothing found</string>
 
-    <!-- Ошибка соединения с сервером -->
+    <!-- 4.5. Ошибка соединения с сервером -->
     <string name="search_error">Connection problems</string>
     <string name="search_error_full">Connection problems\n\nLoading failed. Check your internet connection</string>
     <string name="search_retry">Retry</string>
 
-    <!-- Описания элементов интерфейса -->
-    <string name="back_button_description">Go back</string>
-    <string name="share_icon_description">Share</string>
-    <string name="support_icon_description">Write to support</string>
-    <string name="agreement_icon_description">Open the User Agreement</string>
+    <!-- 5. Экран аудиоплеера -->
+    <!-- 5.1. Кнопки управления -->
+    <string name="player_add_to_playlist">Add to playlist</string>
+    <string name="player_play">Play</string>
+    <string name="player_add_to_favorites">Add to favorites</string>
+
+    <!-- 5.2. Прогресс воспроизведения values/string-->
+
+    <!-- 5.3. Информация о треке -->
+    <string name="player_track_duration">Duration</string>
+    <string name="player_album">Album</string>
+    <string name="player_release_year">Year</string>
+    <string name="player_genre">Genre</string>
+    <string name="player_country">Country</string>
 
 </resources>

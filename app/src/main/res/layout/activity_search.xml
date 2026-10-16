@@ -121,7 +121,7 @@
             android:gravity="center"
             android:text="@string/search_history_title"
             android:textColor="@color/primary_text"
-            android:textSize="19sp" />
+            android:textSize="@dimen/search_state_text_size" />
 
         <!-- 3а.2. Список треков истории -->
         <androidx.recyclerview.widget.RecyclerView
@@ -157,8 +157,8 @@
     <!-- 4.1. Изображение «Ничего не нашлось» -->
     <ImageView
         android:id="@+id/emptyStateImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/search_state_image_size"
+        android:layout_height="@dimen/search_state_image_size"
         android:src="@drawable/ic_search_empty"
         android:contentDescription="@string/search_empty" />
 
@@ -171,7 +171,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/search_empty"
         android:textColor="@color/primary_text"
-        android:textSize="19sp" />
+        android:textSize="@dimen/search_state_text_size" />
     </LinearLayout>
 
     <!-- 5. Ошибка соединения с сервером -->
@@ -190,24 +190,24 @@
         <!-- 5.1. Изображение «Проблемы со связью» -->
         <ImageView
             android:id="@+id/errorStateImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/search_state_image_size"
+            android:layout_height="@dimen/search_state_image_size"
             android:src="@drawable/ic_search_error"
             android:contentDescription="@string/search_error" />
 
         <!-- 5.2. Заголовок ошибки -->
         <TextView
             android:id="@+id/errorStateText"
-            android:layout_width="312dp"
+            android:layout_width="@dimen/search_error_text_width"
             android:layout_height="wrap_content"
-            android:minHeight="88dp"
-            android:layout_marginTop="16dp"
+            android:minHeight="@dimen/search_error_text_min_height"
+            android:layout_marginTop="@dimen/search_error_text_margin_top"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center_horizontal|top"
             android:text="@string/search_error_full"
             android:textColor="@color/primary_text"
-            android:textSize="19sp"
-            android:lineSpacingExtra="3sp"
+            android:textSize="@dimen/search_state_text_size"
+            android:lineSpacingExtra="@dimen/search_error_line_spacing"
             android:letterSpacing="0"
             android:includeFontPadding="false" />
 

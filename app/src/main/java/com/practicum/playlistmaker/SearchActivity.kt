@@ -170,6 +170,9 @@ class SearchActivity : AppCompatActivity()
     private fun onTrackClicked(track: Track) {
         searchHistory.add(track)
         historyAdapter.updateTracks(searchHistory.read())
+
+        val intent = AudioPlayerActivity.createIntent(this, track)
+        startActivity(intent)
     }
 
     private fun clearHistory() {
