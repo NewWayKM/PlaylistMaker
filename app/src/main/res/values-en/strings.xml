@@ -59,6 +59,7 @@
     <!-- 5.1. Кнопки управления -->
     <string name="player_add_to_playlist">Add to playlist</string>
     <string name="player_play">Play</string>
+    <string name="player_pause">Pause</string>
     <string name="player_add_to_favorites">Add to favorites</string>
 
     <!-- 5.2. Прогресс воспроизведения values/string-->
