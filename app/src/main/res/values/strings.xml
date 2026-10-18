@@ -62,6 +62,7 @@
     <!-- 5.1. Кнопки управления -->
     <string name="player_add_to_playlist">Добавить в плейлист</string>
     <string name="player_play">Воспроизвести</string>
+    <string name="player_pause">Приостановить</string>
     <string name="player_add_to_favorites">Добавить в избранное</string>
 
     <!-- 5.2. Прогресс воспроизведения -->

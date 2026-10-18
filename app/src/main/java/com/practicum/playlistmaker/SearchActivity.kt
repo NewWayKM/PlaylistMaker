@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.view.View
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
@@ -25,6 +28,29 @@ class SearchActivity : AppCompatActivity()
     private var lastSearchQuery = ""
     private var currentSearchCall: Call<TrackSearchResponse>? = null
 
+    // 1.1. Отложенный поиск
+    private val handler = Handler(Looper.getMainLooper())
+    private var isSearchPending = false
+    private var resumePendingSearch = false
+    private var isScreenResumed = false
+
+    // 1.2. Защита от повторного открытия аудиоплеера
+    private var lastTrackClickTime = 0L
+    private var isPlayerOpening = false
+    private val searchRunnable = Runnable {
+        isSearchPending = false
+
+        if (!isScreenResumed) {
+            resumePendingSearch = true
+        } else {
+            val query = searchEditText.text.toString().trim()
+
+            if (query.isNotEmpty()) {
+                searchTracks(query)
+            }
+        }
+    }
+
     // 2. История и адаптеры
     private lateinit var searchHistory: SearchHistory
     private val trackAdapter = TrackAdapter(ArrayList()) { track ->
@@ -45,6 +71,7 @@ class SearchActivity : AppCompatActivity()
     private lateinit var backButton: View
     private lateinit var retryButton: View
     private lateinit var clearHistoryButton: View
+    private lateinit var loadingContainer: View
 
     // 4. Создание экрана
     override fun onCreate(savedInstanceState: Bundle?)
@@ -80,6 +107,7 @@ class SearchActivity : AppCompatActivity()
         backButton = findViewById(R.id.backButton)
         retryButton = findViewById(R.id.retryButton)
         clearHistoryButton = findViewById(R.id.clearHistoryButton)
+        loadingContainer = findViewById(R.id.loadingContainer)
     }
 
     // 6. Инициализация истории
@@ -136,11 +164,39 @@ class SearchActivity : AppCompatActivity()
             searchText = text.toString()
             clearButton.isVisible = !text.isNullOrEmpty()
 
+            // 9.1. Отменяем предыдущий отложенный поиск
+            handler.removeCallbacks(searchRunnable)
+            isSearchPending = false
+            resumePendingSearch = false
+
+            // 9.2. Отменяем устаревший сетевой запрос
+            currentSearchCall?.cancel()
+            currentSearchCall = null
+
+            // 9.3. Скрываем результаты предыдущего запроса
+            clearSearchResults()
+
+            // 9.4. Запускаем отложенный поиск при непустом запросе
+            if (searchText.isNotBlank()) {
+                searchDebounce()
+            }
+
             updateHistoryVisibility()
         }
 
         searchEditText.setOnFocusChangeListener { _, _ ->
             updateHistoryVisibility()
+        }
+    }
+
+    // 9.1. Поиск через две секунды после последнего изменения текста
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+
+        isSearchPending = searchEditText.text.toString().isNotBlank()
+
+        if (isSearchPending) {
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         }
     }
 
@@ -168,9 +224,23 @@ class SearchActivity : AppCompatActivity()
     // 11. Работа с историей
 
     private fun onTrackClicked(track: Track) {
+        val currentTime = SystemClock.elapsedRealtime()
+
+        // 11.1. Блокируем повторное нажатие
+        if (isPlayerOpening ||
+            currentTime - lastTrackClickTime < TRACK_CLICK_DEBOUNCE_DELAY
+        ) {
+            return
+        }
+
+        lastTrackClickTime = currentTime
+        isPlayerOpening = true
+
+        // 11.2. Сохраняем выбранный трек в историю
         searchHistory.add(track)
         historyAdapter.updateTracks(searchHistory.read())
 
+        // 11.3. Открываем аудиоплеер
         val intent = AudioPlayerActivity.createIntent(this, track)
         startActivity(intent)
     }
@@ -218,6 +288,9 @@ class SearchActivity : AppCompatActivity()
                 val query = searchEditText.text.toString().trim()
 
                 if (query.isNotEmpty()) {
+                    handler.removeCallbacks(searchRunnable)
+                    isSearchPending = false
+                    resumePendingSearch = false
                     searchTracks(query)
                 }
 
@@ -232,6 +305,7 @@ class SearchActivity : AppCompatActivity()
     private fun searchTracks(query: String) {
         currentSearchCall?.cancel()
         clearSearchResults()
+        loadingContainer.isVisible = true
 
         lastSearchQuery = query
         val newCall = ITunesNetworkClient.apiService.searchTracks(query)
@@ -246,6 +320,8 @@ class SearchActivity : AppCompatActivity()
                     if (call !== currentSearchCall || call.isCanceled) {
                         return
                     }
+
+                    loadingContainer.isVisible = false
 
                     if (response.isSuccessful && response.body() != null) {
                         val tracks = response.body()?.results.orEmpty()
@@ -263,6 +339,7 @@ class SearchActivity : AppCompatActivity()
                     if (call !== currentSearchCall || call.isCanceled) {
                         return
                     }
+                    loadingContainer.isVisible = false
                     showSearchError()
                 }
             })
@@ -270,6 +347,7 @@ class SearchActivity : AppCompatActivity()
 
     // 15. Управление результатами поиска
     private fun clearSearchResults() {
+        loadingContainer.isVisible = false
         trackAdapter.updateTracks(emptyList())
         tracksRecyclerView.isVisible = false
         historyContainer.isVisible = false
@@ -315,8 +393,38 @@ class SearchActivity : AppCompatActivity()
         searchEditText.setText(searchText)
     }
 
+    // 16.1. Возобновление работы экрана
+    override fun onResume() {
+        super.onResume()
+        isScreenResumed = true
+        isPlayerOpening = false
+
+        if (resumePendingSearch) {
+            resumePendingSearch = false
+            searchDebounce()
+        }
+    }
+
+    // 16.2. Приостановка работы экрана
+    override fun onPause() {
+        isScreenResumed = false
+
+        if (isSearchPending) {
+            handler.removeCallbacks(searchRunnable)
+            isSearchPending = false
+            resumePendingSearch = true
+        }
+
+        currentSearchCall?.cancel()
+        currentSearchCall = null
+        loadingContainer.isVisible = false
+
+        super.onPause()
+    }
+
     // 17. Завершение работы экрана
     override fun onDestroy() {
+        handler.removeCallbacks(searchRunnable)
         currentSearchCall?.cancel()
         currentSearchCall = null
         super.onDestroy()
@@ -326,5 +434,8 @@ class SearchActivity : AppCompatActivity()
     companion object {
         private const val SEARCH_TEXT = "SEARCH_TEXT"
         private const val LAST_SEARCH_QUERY = "LAST_SEARCH_QUERY"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val TRACK_CLICK_DEBOUNCE_DELAY = 1000L
+
     }
 }

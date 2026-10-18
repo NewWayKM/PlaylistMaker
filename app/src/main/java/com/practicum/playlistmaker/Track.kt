@@ -14,7 +14,8 @@ data class Track(
     val collectionName: String? = null,
     val releaseDate: String? = null,
     val primaryGenreName: String? = null,
-    val country: String? = null
+    val country: String? = null,
+    val previewUrl: String? = null
 ) : Parcelable {
     // 1. Получение обложки высокого разрешения для аудиоплеера
     fun getCoverArtwork(): String? {
