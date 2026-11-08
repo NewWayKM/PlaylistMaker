@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- 1. Корневой контейнер одного элемента списка треков -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/track_item_height">
 
+    <!-- 2. Обложка музыкального трека -->
     <ImageView
         android:id="@+id/trackCover"
         android:layout_width="@dimen/track_cover_size"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- 3. Название музыкального трека -->
     <TextView
         android:id="@+id/trackName"
         android:layout_width="0dp"
@@ -32,6 +34,7 @@
         app:layout_constraintStart_toEndOf="@id/trackCover"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- 4. Контейнер дополнительной информации о треке -->
     <LinearLayout
         android:id="@+id/trackInfo"
         android:layout_width="wrap_content"
@@ -45,6 +48,7 @@
         app:layout_constraintStart_toStartOf="@id/trackName"
         app:layout_constraintTop_toBottomOf="@id/trackName">
 
+        <!-- 4.1. Имя исполнителя -->
         <TextView
             android:id="@+id/artistName"
             android:layout_width="wrap_content"
@@ -55,10 +59,12 @@
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/track_info_text_size" />
 
+        <!-- 4.2. Контейнер разделительной точки -->
         <FrameLayout
             android:layout_width="@dimen/track_info_dot_container_size"
             android:layout_height="@dimen/track_info_dot_container_size">
 
+            <!-- 4.2.1. Разделительная точка между исполнителем и временем -->
             <View
                 android:layout_width="@dimen/track_info_dot_size"
                 android:layout_height="@dimen/track_info_dot_size"
@@ -67,6 +73,7 @@
 
         </FrameLayout>
 
+        <!-- 4.5. Длительность музыкального трека -->
         <TextView
             android:id="@+id/trackTime"
             android:layout_width="wrap_content"
@@ -77,6 +84,7 @@
 
     </LinearLayout>
 
+    <!-- 5. Стрелка перехода к экрану аудиоплеера -->
     <ImageView
         android:id="@+id/trackArrow"
         android:layout_width="@dimen/track_arrow_size"

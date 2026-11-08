@@ -36,6 +36,9 @@
     <string name="user_agreement_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="agreement_icon_description">Открыть пользовательское соглашение</string>
 
+    <!-- 3.5. Сообщение при отсутствии внешнего приложения -->
+    <string name="external_app_not_found">Нет приложения для выполнения этого действия</string>
+
     <!-- 4. Экран поиска -->
     <!-- 4.1. Поисковая строка -->
     <string name="clear_search_description">Очистить поисковый запрос</string>
@@ -75,6 +78,5 @@
     <string name="player_genre">Жанр</string>
     <string name="player_country">Страна</string>
     <string name="player_unknown_value" translatable="false">—</string>
-
 
 </resources>

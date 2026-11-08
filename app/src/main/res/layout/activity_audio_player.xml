@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- 1. Корневой контейнер с вертикальной прокруткой -->
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/audioPlayerRoot"
     android:layout_width="match_parent"
@@ -16,14 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <!-- 2.1. Верхняя панель аудиоплеера -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/playerHeader"
             android:layout_width="0dp"
             android:layout_height="@dimen/header_height"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <!-- 2.1.1. Кнопка возврата на предыдущий экран -->
@@ -34,11 +32,11 @@
                 android:layout_marginStart="@dimen/screen_horizontal_margin"
                 android:contentDescription="@string/back_button_description"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/primary_text"
+                android:translationY="@dimen/header_title_offset"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:translationY="@dimen/header_title_offset"/>
+                app:tint="@color/primary_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -50,14 +48,14 @@
             android:layout_marginStart="@dimen/player_cover_margin_horizontal"
             android:layout_marginTop="@dimen/player_cover_margin_top"
             android:layout_marginEnd="@dimen/player_cover_margin_horizontal"
+            android:background="@drawable/player_cover_background"
+            android:clipToOutline="true"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_track_placeholder"
-            android:clipToOutline="true"
-            android:background="@drawable/player_cover_background"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playerHeader" />
 
         <!-- 2.3. Название выбранного трека -->
@@ -68,15 +66,15 @@
             android:layout_marginStart="@dimen/player_track_text_margin_horizontal"
             android:layout_marginTop="@dimen/player_track_name_margin_top"
             android:layout_marginEnd="@dimen/player_track_text_margin_horizontal"
+            android:ellipsize="end"
             android:fontFamily="@font/ys_display_medium"
+            android:includeFontPadding="false"
+            android:lineHeight="@dimen/player_track_name_line_height"
+            android:maxLines="2"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/player_track_name_text_size"
-            android:lineHeight="@dimen/player_track_name_line_height"
-            android:includeFontPadding="false"
-            android:maxLines="2"
-            android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playerCover" />
 
         <!-- 2.4. Имя исполнителя -->
@@ -87,15 +85,15 @@
             android:layout_marginStart="@dimen/player_track_text_margin_horizontal"
             android:layout_marginTop="@dimen/player_artist_margin_top"
             android:layout_marginEnd="@dimen/player_track_text_margin_horizontal"
+            android:ellipsize="end"
             android:fontFamily="@font/ys_display_medium"
+            android:includeFontPadding="false"
+            android:lineHeight="@dimen/player_artist_line_height"
+            android:maxLines="2"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/player_artist_text_size"
-            android:lineHeight="@dimen/player_artist_line_height"
-            android:includeFontPadding="false"
-            android:maxLines="2"
-            android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playerTrackName" />
 
         <!-- 2.5. Кнопка добавления в плейлист -->
@@ -106,11 +104,11 @@
             android:layout_marginStart="@dimen/player_cover_margin_horizontal"
             android:background="@android:color/transparent"
             android:contentDescription="@string/player_add_to_playlist"
-            android:src="@drawable/ic_player_playlist_add"
             android:scaleType="fitCenter"
+            android:src="@drawable/ic_player_playlist_add"
+            app:layout_constraintBottom_toBottomOf="@id/playerPlayButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerPlayButton"
-            app:layout_constraintBottom_toBottomOf="@id/playerPlayButton" />
+            app:layout_constraintTop_toTopOf="@id/playerPlayButton" />
 
         <!-- 2.6. Кнопка воспроизведения -->
         <ImageButton
@@ -120,10 +118,10 @@
             android:layout_marginTop="@dimen/player_controls_margin_top"
             android:background="@android:color/transparent"
             android:contentDescription="@string/player_play"
-            android:src="@drawable/ic_player_play"
             android:scaleType="fitCenter"
-            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/ic_player_play"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playerArtistName" />
 
         <!-- 2.7. Кнопка добавления в избранное -->
@@ -134,11 +132,11 @@
             android:layout_marginEnd="@dimen/player_cover_margin_horizontal"
             android:background="@android:color/transparent"
             android:contentDescription="@string/player_add_to_favorites"
-            android:src="@drawable/ic_player_favorite"
             android:scaleType="fitCenter"
+            android:src="@drawable/ic_player_favorite"
+            app:layout_constraintBottom_toBottomOf="@id/playerPlayButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerPlayButton"
-            app:layout_constraintBottom_toBottomOf="@id/playerPlayButton" />
+            app:layout_constraintTop_toTopOf="@id/playerPlayButton" />
 
         <!-- 2.8. Прогресс воспроизведения -->
         <TextView
@@ -147,14 +145,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/player_progress_margin_top"
             android:fontFamily="@font/ys_display_medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineHeight="@dimen/player_progress_line_height"
             android:text="@string/player_progress_time"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/player_progress_text_size"
-            android:lineHeight="@dimen/player_progress_line_height"
-            android:includeFontPadding="false"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="@id/playerPlayButton"
             app:layout_constraintEnd_toEndOf="@id/playerPlayButton"
+            app:layout_constraintStart_toStartOf="@id/playerPlayButton"
             app:layout_constraintTop_toBottomOf="@id/playerPlayButton" />
 
         <!-- 2.9. Информация о треке -->
@@ -177,9 +175,9 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/player_info_row_height"
             android:layout_marginEnd="@dimen/screen_horizontal_margin"
+            app:layout_constraintBottom_toBottomOf="@id/playerDurationLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerDurationLabel"
-            app:layout_constraintBottom_toBottomOf="@id/playerDurationLabel" />
+            app:layout_constraintTop_toTopOf="@id/playerDurationLabel" />
 
         <!-- 2.9.3. Нижняя граница строки длительности -->
         <androidx.constraintlayout.widget.Barrier
@@ -188,7 +186,6 @@
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="playerDurationLabel,playerDurationValue" />
-
 
         <!-- 2.10. Информация об альбоме -->
         <!-- 2.10.1. Название параметра «Альбом» -->
@@ -211,12 +208,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/screen_horizontal_margin"
             android:layout_marginEnd="@dimen/screen_horizontal_margin"
-            android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@id/playerAlbumLabel"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@id/playerAlbumLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerAlbumLabel"
-            app:layout_constraintBottom_toBottomOf="@id/playerAlbumLabel" />
+            app:layout_constraintStart_toEndOf="@id/playerAlbumLabel"
+            app:layout_constraintTop_toTopOf="@id/playerAlbumLabel" />
 
         <!-- 2.10.3. Группа элементов альбома -->
         <androidx.constraintlayout.widget.Group
@@ -230,10 +227,9 @@
             android:id="@+id/playerAlbumBarrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
             app:barrierAllowsGoneWidgets="false"
+            app:barrierDirection="bottom"
             app:constraint_referenced_ids="playerAlbumLabel,playerAlbumValue" />
-
 
         <!-- 2.11. Информация о годе релиза -->
         <!-- 2.11.1. Название параметра «Год» -->
@@ -255,9 +251,9 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/player_info_row_height"
             android:layout_marginEnd="@dimen/screen_horizontal_margin"
+            app:layout_constraintBottom_toBottomOf="@id/playerYearLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerYearLabel"
-            app:layout_constraintBottom_toBottomOf="@id/playerYearLabel" />
+            app:layout_constraintTop_toTopOf="@id/playerYearLabel" />
 
         <!-- 2.11.3. Группа элементов года -->
         <androidx.constraintlayout.widget.Group
@@ -271,10 +267,9 @@
             android:id="@+id/playerYearBarrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
             app:barrierAllowsGoneWidgets="false"
+            app:barrierDirection="bottom"
             app:constraint_referenced_ids="playerYearLabel,playerYearValue" />
-
 
         <!-- 2.12. Информация о жанре трека -->
         <!-- 2.12.1. Название параметра «Жанр» -->
@@ -297,12 +292,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/screen_horizontal_margin"
             android:layout_marginEnd="@dimen/screen_horizontal_margin"
-            android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@id/playerGenreLabel"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@id/playerGenreLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerGenreLabel"
-            app:layout_constraintBottom_toBottomOf="@id/playerGenreLabel" />
+            app:layout_constraintStart_toEndOf="@id/playerGenreLabel"
+            app:layout_constraintTop_toTopOf="@id/playerGenreLabel" />
 
         <!-- 2.12.3. Нижняя граница строки жанра -->
         <androidx.constraintlayout.widget.Barrier
@@ -311,7 +306,6 @@
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="playerGenreLabel,playerGenreValue" />
-
 
         <!-- 2.13. Информация о стране исполнителя -->
         <!-- 2.13.1. Название параметра «Страна» -->
@@ -334,12 +328,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/screen_horizontal_margin"
             android:layout_marginEnd="@dimen/screen_horizontal_margin"
-            android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@id/playerCountryLabel"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@id/playerCountryLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/playerCountryLabel"
-            app:layout_constraintBottom_toBottomOf="@id/playerCountryLabel" />
+            app:layout_constraintStart_toEndOf="@id/playerCountryLabel"
+            app:layout_constraintTop_toTopOf="@id/playerCountryLabel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

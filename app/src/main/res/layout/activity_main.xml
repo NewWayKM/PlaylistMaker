@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- 1. Главный экран приложения Playlist Maker -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainRoot"
@@ -8,6 +9,7 @@
     android:background="@color/main_screen_background"
     android:orientation="vertical">
 
+    <!-- 2. Заголовок главного экрана -->
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -21,6 +23,7 @@
         android:textStyle="bold"
         android:translationY="@dimen/header_title_offset" />
 
+    <!-- 3. Контейнер кнопок навигации -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,6 +33,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <!-- 3.1. Кнопка перехода к поиску треков -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/searchButton"
             style="@style/MainScreenButton"
@@ -39,10 +43,12 @@
             android:text="@string/search"
             app:icon="@drawable/ic_search" />
 
+        <!-- 3.2. Отступ между кнопками поиска и медиатеки -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_spacing" />
 
+        <!-- 3.3. Кнопка перехода в медиатеку -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mediaLibraryButton"
             style="@style/MainScreenButton"
@@ -52,10 +58,12 @@
             android:text="@string/media_library"
             app:icon="@drawable/ic_media" />
 
+        <!-- 3.4. Отступ между кнопками медиатеки и настроек -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_spacing" />
 
+        <!-- 3.5. Кнопка перехода к настройкам -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settingsButton"
             style="@style/MainScreenButton"

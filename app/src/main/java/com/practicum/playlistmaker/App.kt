@@ -3,40 +3,27 @@ package com.practicum.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 
+// 1. Запуск приложения и инициализация зависимостей
 class App : Application() {
 
-    private val preferences by lazy {
-        getSharedPreferences(AppConstants.PREFERENCES_NAME, MODE_PRIVATE)
-    }
-
-    var darkTheme = false
-        private set
-
+    // 2. Создание приложения
     override fun onCreate() {
         super.onCreate()
 
-        if (preferences.contains(AppConstants.DARK_THEME_KEY)) {
-            val savedTheme = preferences.getBoolean(AppConstants.DARK_THEME_KEY, false)
-            switchTheme(savedTheme)
-        } else {
-            darkTheme = resources.configuration.uiMode and
-                    android.content.res.Configuration.UI_MODE_NIGHT_MASK ==
-                    android.content.res.Configuration.UI_MODE_NIGHT_YES
-        }
-    }
+        // 2.1. Инициализация Creator
+        Creator.init(this)
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+        // 2.2. Получение сохранённой темы
+        val darkTheme = Creator.provideSettingsInteractor()
+            .read()
+            .darkTheme
 
-        preferences.edit()
-            .putBoolean(AppConstants.DARK_THEME_KEY, darkThemeEnabled)
-            .apply()
-
+        // 2.3. Применение темы
         AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
+            when (darkTheme) {
+                true -> AppCompatDelegate.MODE_NIGHT_YES
+                false -> AppCompatDelegate.MODE_NIGHT_NO
+                null -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
         )
     }
