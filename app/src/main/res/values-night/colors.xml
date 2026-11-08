@@ -4,7 +4,6 @@
 
     <!-- 1. Цвета по макету, основные-->
     <!-- res/values/colors.xml-->
-
     <!-- 2. Общие цвета тёмной темы-->
     <color name="screen_background">@color/yp_black</color>
     <color name="primary_text">@color/yp_white</color>
