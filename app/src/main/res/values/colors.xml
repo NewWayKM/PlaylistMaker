@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 
+    <!-- 1. Цвета по макету, основные-->
     <color name="yp_blue">#3772E7</color>
     <color name="yp_white">#FFFFFF</color>
     <color name="yp_black">#1A1B22</color>
-
     <color name="yp_gray">#AEAFB4</color>
     <color name="yp_light_gray">#E6E8EB</color>
 
-    <color name="switch_active">#00C9B7</color>
+    <!-- 2. Общие цвета светлой темы -->
+    <color name="screen_background">@color/yp_white</color>
+    <color name="primary_text">@color/yp_black</color>
+    <color name="secondary_text">@color/yp_gray</color>
+
+    <!-- 3. Главный экран -->
+    <color name="main_screen_background">@color/yp_blue</color>
+    <color name="main_button_background">@color/yp_white</color>
+    <color name="main_button_content">@color/yp_black</color>
+
+    <!-- 4. Экран поиска -->
+    <!-- 4.1 Поле поиска -->
+    <color name="search_field_background">@color/yp_light_gray</color>
+    <color name="search_field_text">@color/yp_black</color>
+    <color name="search_field_hint">@color/yp_gray</color>
+
+    <!-- 4.2 Кнопка «Обновить» на экране ошибки поиска -->
+    <color name="search_retry_background">@color/yp_black</color>
+    <color name="search_retry_text">@color/yp_white</color>
+
+    <!-- 4.3 Кнопка очистки истории -->
+    <color name="search_history_button_background">@color/yp_black</color>
+    <color name="search_history_button_text">@color/yp_white</color>
+
+    <!-- 5. Экран аудиоплеера -->
+    <!-- 5.1. Центральная кнопка Play/Pause -->
+    <color name="player_control_color">@color/yp_black</color>
+
+    <!-- 5.2. Фон боковых кнопок -->
+    <color name="player_side_button_background">@color/yp_black</color>
 
 </resources>

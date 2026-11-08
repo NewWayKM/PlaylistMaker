@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("kotlin-parcelize")
+    //alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -41,6 +43,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.glide)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

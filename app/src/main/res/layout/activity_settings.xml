@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- 1. Корневой контейнер экрана настроек -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yp_white"
+    android:background="@color/screen_background"
     android:orientation="vertical">
 
-    <!-- Верхняя панель -->
-
+    <!-- 2. Верхняя панель: кнопка возврата и заголовок -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_height"
@@ -17,6 +18,7 @@
         android:paddingStart="@dimen/screen_horizontal_margin"
         android:paddingEnd="@dimen/screen_horizontal_margin">
 
+        <!-- 2.1. Кнопка возврата на предыдущий экран -->
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="@dimen/settings_back_icon_size"
@@ -24,133 +26,68 @@
             android:contentDescription="@string/back_button_description"
             android:src="@drawable/ic_arrow_back"
             android:translationY="@dimen/header_title_offset"
-            app:tint="@color/yp_black" />
+            app:tint="@color/primary_text" />
 
+        <!-- 2.2. Заголовок экрана «Настройки» -->
         <TextView
             android:id="@+id/settingsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/header_title_margin_start"
             android:text="@string/settings_title"
-            android:textColor="@color/yp_black"
+            android:textColor="@color/primary_text"
             android:textSize="@dimen/header_title_size"
             android:textStyle="bold"
             android:translationY="@dimen/header_title_offset" />
 
     </LinearLayout>
 
+    <!-- 3. Отступ между верхней панелью и настройками -->
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_rows_top_spacing" />
 
-    <!-- Тёмная тема -->
+    <!-- 4. Переключатель светлой и тёмной темы -->
 
-    <LinearLayout
-        android:id="@+id/darkThemeRow"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/darkThemeSwitch"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:paddingStart="@dimen/screen_horizontal_margin"
-        android:paddingEnd="@dimen/screen_horizontal_margin">
+        android:paddingEnd="@dimen/screen_horizontal_margin"
+        android:text="@string/dark_theme"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/settings_text_size" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dark_theme"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/settings_text_size" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/darkThemeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <!-- Поделиться приложением -->
-
-    <LinearLayout
+    <!-- 5. Поделиться приложением -->
+    <TextView
         android:id="@+id/shareAppRow"
+        style="@style/SettingsRow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/screen_horizontal_margin"
-        android:paddingEnd="@dimen/screen_horizontal_margin">
+        android:text="@string/share_app"
+        app:drawableEndCompat="@drawable/ic_share"
+        app:drawableTint="@color/yp_gray" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/share_app"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/settings_text_size" />
-
-        <ImageView
-            android:layout_width="@dimen/settings_icon_size"
-            android:layout_height="@dimen/settings_icon_size"
-            android:contentDescription="@string/share_icon_description"
-            android:src="@drawable/ic_share"
-            app:tint="@color/yp_gray" />
-
-    </LinearLayout>
-
-    <!-- Написать в поддержку -->
-
-    <LinearLayout
+    <!-- 6. Написать в поддержку -->
+    <TextView
         android:id="@+id/supportRow"
+        style="@style/SettingsRow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/screen_horizontal_margin"
-        android:paddingEnd="@dimen/screen_horizontal_margin">
+        android:text="@string/write_to_support"
+        app:drawableEndCompat="@drawable/ic_help_group"
+        app:drawableTint="@color/yp_gray" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/write_to_support"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/settings_text_size" />
-
-        <ImageView
-            android:layout_width="@dimen/settings_icon_size"
-            android:layout_height="@dimen/settings_icon_size"
-            android:contentDescription="@string/support_icon_description"
-            android:src="@drawable/ic_help_group"
-            app:tint="@color/yp_gray" />
-
-    </LinearLayout>
-
-    <!-- Пользовательское соглашение -->
-
-    <LinearLayout
+    <!-- 7. Пользовательское соглашение -->
+    <TextView
         android:id="@+id/userAgreementRow"
+        style="@style/SettingsRow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_row_height"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/screen_horizontal_margin"
-        android:paddingEnd="@dimen/screen_horizontal_margin">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/user_agreement"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/settings_text_size" />
-
-        <ImageView
-            android:layout_width="@dimen/settings_icon_size"
-            android:layout_height="@dimen/settings_icon_size"
-            android:contentDescription="@string/agreement_icon_description"
-            android:src="@drawable/ic_arrow_right"
-            app:tint="@color/yp_gray" />
-
-    </LinearLayout>
+        android:text="@string/user_agreement"
+        app:drawableEndCompat="@drawable/ic_arrow_right"
+        app:drawableTint="@color/yp_gray" />
 
 </LinearLayout>

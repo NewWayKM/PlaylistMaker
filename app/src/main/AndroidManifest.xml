@@ -2,7 +2,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- 1. Разрешения приложения -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 2. Общие настройки приложения -->
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -10,27 +15,36 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        android:theme="@style/Theme.PlaylistMaker">
 
+        <!-- 3. Экраны приложения -->
+        <!-- 3.1. Экран настроек -->
         <activity
-            android:name=".SettingsActivity"
+            android:name=".presentation.SettingsActivity"
             android:exported="false" />
 
+        <!-- 3.2. Экран медиатеки -->
         <activity
-            android:name=".MediaLibraryActivity"
+            android:name=".presentation.MediaLibraryActivity"
             android:exported="false" />
 
+        <!-- 3.3. Экран поиска -->
         <activity
-            android:name=".SearchActivity"
+            android:name=".presentation.SearchActivity"
             android:exported="false" />
 
+        <!-- 3.4. Экран аудиоплеера -->
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.AudioPlayerActivity"
+            android:exported="false" />
+
+        <!-- 3.5. Главный экран (точка входа) -->
+        <activity
+            android:name=".presentation.MainActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
