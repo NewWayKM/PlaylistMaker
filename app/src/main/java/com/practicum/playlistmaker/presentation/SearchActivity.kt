@@ -1,9 +1,6 @@
 package com.practicum.playlistmaker.presentation
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,56 +12,29 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.Cancellable
-import com.practicum.playlistmaker.domain.api.HistoryInteractor
-import com.practicum.playlistmaker.domain.api.TracksInteractor
-import com.practicum.playlistmaker.domain.models.SearchResult
-import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.adapter.TrackAdapter
+import com.practicum.playlistmaker.presentation.state.SearchContent
+import com.practicum.playlistmaker.presentation.state.SearchScreenState
+import com.practicum.playlistmaker.presentation.viewmodel.SearchViewModel
+import com.practicum.playlistmaker.presentation.viewmodel.SearchViewModelFactory
 
 class SearchActivity : AppCompatActivity() {
-    // 1. Состояние поиска
-    private var searchText = ""
-    private var lastSearchQuery = ""
-    private var currentSearchTask: Cancellable? = null
-    private var searchGeneration = 0L
+    // 1. ViewModel экрана поиска
+    private lateinit var viewModel: SearchViewModel
 
-    // 1.1. Отложенный поиск
-    private val handler = Handler(Looper.getMainLooper())
-    private var isSearchPending = false
-    private var resumePendingSearch = false
-    private var isScreenResumed = false
+    // 1.1. Защита от повторной обработки программного изменения текста
+    private var isRenderingQuery = false
 
-    // 1.2. Защита от повторного открытия аудиоплеера
-    private var lastTrackClickTime = 0L
-    private var isPlayerOpening = false
-    private val searchRunnable = Runnable {
-        isSearchPending = false
-
-        if (!isScreenResumed) {
-            resumePendingSearch = true
-        } else {
-            val query = searchEditText.text.toString().trim()
-
-            if (query.isNotEmpty()) {
-                searchTracks(query)
-            }
-        }
-    }
-
-    // 2. История и адаптеры
-    // 2.1. Интеракторы новой архитектуры
-    private lateinit var tracksInteractor: TracksInteractor
-    private lateinit var historyInteractor: HistoryInteractor
+    // 2. Адаптеры результатов поиска и истории
     private val trackAdapter = TrackAdapter(ArrayList()) { track ->
-        onTrackClicked(track)
+        viewModel.onTrackClicked(track)
     }
     private val historyAdapter = TrackAdapter(ArrayList()) { track ->
-        onTrackClicked(track)
+        viewModel.onTrackClicked(track)
     }
 
     // 3. Элементы интерфейса
@@ -85,8 +55,13 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        // 4.1. Создание ViewModel через ViewModelProvider
+        viewModel = ViewModelProvider(
+            this,
+            SearchViewModelFactory(savedInstanceState?.getString(SEARCH_TEXT).orEmpty())
+        )[SearchViewModel::class.java]
+
         initViews()
-        initInteractors()
         setupRecyclerViews()
         setupClickListeners()
         setupSearchField()
@@ -94,13 +69,21 @@ class SearchActivity : AppCompatActivity() {
         setupWindowInsets()
 
         searchEditText.requestFocus()
-        updateHistoryVisibility()
+
+        // 4.2. Подписка на состояние экрана
+        viewModel.state.observe(this) { state ->
+            render(state)
+
+        }
     }
 
-// 5. Инициализация интерфейса
-
+    // 5. Инициализация интерфейса
     private fun initViews() {
         searchEditText = findViewById(R.id.searchEditText)
+
+        // 5.1. Восстановление текста выполняется через ViewModel
+        searchEditText.isSaveEnabled = false
+
         clearButton = findViewById(R.id.clearButton)
 
         tracksRecyclerView = findViewById(R.id.tracksRecyclerView)
@@ -115,15 +98,7 @@ class SearchActivity : AppCompatActivity() {
         clearHistoryButton = findViewById(R.id.clearHistoryButton)
         loadingContainer = findViewById(R.id.loadingContainer)
     }
-
-    // 5.1. Получение интеракторов через Creator
-    private fun initInteractors() {
-        tracksInteractor = Creator.provideTracksInteractor()
-        historyInteractor = Creator.provideHistoryInteractor()
-    }
-
-    // 6. Инициализация истории
-
+    // 6. (---)
     // 7. Настройка списков
 
     private fun setupRecyclerViews() {
@@ -132,8 +107,6 @@ class SearchActivity : AppCompatActivity() {
 
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
-
-        historyAdapter.updateTracks(historyInteractor.read())
     }
 
     // 8. Обработка нажатий
@@ -148,13 +121,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         retryButton.setOnClickListener {
-            if (lastSearchQuery.isNotEmpty()) {
-                searchTracks(lastSearchQuery)
-            }
+            viewModel.onRetryClicked()
         }
 
         clearHistoryButton.setOnClickListener {
-            clearHistory()
+            viewModel.onClearHistoryClicked()
         }
     }
 
@@ -163,50 +134,16 @@ class SearchActivity : AppCompatActivity() {
     private fun setupSearchField() {
         clearButton.isVisible = searchEditText.text.isNotEmpty()
 
+        // 9.1. Передача изменения текста во ViewModel
         searchEditText.doOnTextChanged { text, _, _, _ ->
-            searchText = text.toString()
-            clearButton.isVisible = !text.isNullOrEmpty()
-
-            // 9.1. Отменяем предыдущий отложенный поиск
-            handler.removeCallbacks(searchRunnable)
-            isSearchPending = false
-            resumePendingSearch = false
-
-            // 9.2. Отменяем устаревший сетевой запросам
-            cancelCurrentSearch()
-
-            // 9.3. Скрываем результаты предыдущего запроса
-            clearSearchResults()
-
-            // 9.4. Запускаем отложенный поиск при непустом запросе
-            if (searchText.isNotBlank()) {
-                searchDebounce()
+            if (!isRenderingQuery) {
+                viewModel.onQueryChanged(text?.toString().orEmpty())
             }
-
-            updateHistoryVisibility()
         }
 
-        searchEditText.setOnFocusChangeListener { _, _ ->
-            updateHistoryVisibility()
-        }
-    }
-
-    // 9.1. Поиск через две секунды после последнего изменения текста
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-
-        val hasQuery = searchEditText.text.toString().isNotBlank()
-
-        if (!isScreenResumed) {
-            isSearchPending = false
-            resumePendingSearch = hasQuery
-            return
-        }
-
-        isSearchPending = hasQuery
-
-        if (isSearchPending) {
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        // 9.2. Передача изменения фокуса во ViewModel
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            viewModel.onInputFocusChanged(hasFocus)
         }
     }
 
@@ -231,59 +168,20 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    // 11. Работа с историей
-
-    private fun onTrackClicked(track: Track) {
-        val currentTime = SystemClock.elapsedRealtime()
-
-        // 11.1. Блокируем повторное нажатие
-        if (isPlayerOpening ||
-            currentTime - lastTrackClickTime < TRACK_CLICK_DEBOUNCE_DELAY
-        ) {
-            return
-        }
-
-        lastTrackClickTime = currentTime
-        isPlayerOpening = true
-
-        // 11.2. Сохраняем выбранный трек в историю
-        historyInteractor.add(track)
-        historyAdapter.updateTracks(historyInteractor.read())
-
-        // 11.3. Открываем аудиоплеер
-        val intent = AudioPlayerActivity.Companion.createIntent(this, track)
-        startActivity(intent)
-    }
-
-    private fun clearHistory() {
-        historyInteractor.clear()
-        historyAdapter.updateTracks(emptyList())
-        updateHistoryVisibility()
-    }
-
-    private fun updateHistoryVisibility() {
-        historyContainer.isVisible =
-            searchEditText.hasFocus() &&
-                    searchEditText.text.isEmpty() &&
-                    historyAdapter.itemCount > 0
-    }
-
+    // 11. Работа с историей перенесена во ViewModel
 
     // 12. Очистка поискового запроса
     private fun clearSearch() {
-        searchEditText.setText("")
-        cancelCurrentSearch()
-        lastSearchQuery = ""
+        // 12.1. Очистка поискового запроса через ViewModel
+        viewModel.onClearClicked()
 
-        clearSearchResults()
-
+        // 12.2. Скрытие клавиатуры остаётся в Activity
         val inputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
             searchEditText.windowToken,
             0
         )
-        updateHistoryVisibility()
     }
 
     // 13. Настройка клавиатуры
@@ -294,15 +192,8 @@ class SearchActivity : AppCompatActivity() {
                     event.action == KeyEvent.ACTION_DOWN
 
             if (isDone || isEnter) {
-                val query = searchEditText.text.toString().trim()
-
-                if (query.isNotEmpty()) {
-                    handler.removeCallbacks(searchRunnable)
-                    isSearchPending = false
-                    resumePendingSearch = false
-                    searchTracks(query)
-                }
-
+                // 13.1. Немедленный поиск через ViewModel
+                viewModel.onSearchSubmitted()
                 true
             } else {
                 false
@@ -310,139 +201,72 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    // 14. Выполнение поискового запроса (интерфейс)
-    private fun searchTracks(query: String) {
-        handler.removeCallbacks(searchRunnable)
-        isSearchPending = false
-        resumePendingSearch = false
+    // 14. Отображение состояния поиска из LiveData
+    private fun render(state: SearchScreenState) {
 
-        cancelCurrentSearch()
-        clearSearchResults()
-
-        if (query.isBlank()) {
-            updateHistoryVisibility()
-            return
+        // 14.1. Восстановление текста без повторного поиска
+        if (searchEditText.text.toString() != state.query) {
+            isRenderingQuery = true
+            searchEditText.setText(state.query)
+            searchEditText.setSelection(state.query.length)
+            isRenderingQuery = false
         }
 
-        loadingContainer.isVisible = true
-        lastSearchQuery = query.trim()
+        // 14.2. Управление видимостью элементов
+        clearButton.isVisible = state.query.isNotEmpty()
+        loadingContainer.isVisible = state.content == SearchContent.Loading
+        emptyState.isVisible = state.content == SearchContent.Empty
+        errorState.isVisible = state.content == SearchContent.Error
 
-        val generation = searchGeneration
+        tracksRecyclerView.isVisible =
+            state.content is SearchContent.Tracks
 
-        currentSearchTask = tracksInteractor.search(lastSearchQuery) { result ->
+        historyContainer.isVisible = state.showHistory
 
-            // 14.1. Защита от устаревшего ответа
-            if (generation != searchGeneration) {
-                return@search
-            }
+        // 14.3. Обновление списка результатов
+        trackAdapter.updateTracks(
+            (state.content as? SearchContent.Tracks)?.tracks.orEmpty()
+        )
 
-            currentSearchTask = null
-            loadingContainer.isVisible = false
+        // 14.4. Обновление истории
+        historyAdapter.updateTracks(state.history)
 
-            when (result) {
-                is SearchResult.Success -> showSearchResults(result.tracks)
-                SearchResult.Error -> showSearchError()
-            }
-        }
-    }
+        // 14.5. Переход в аудиоплеер
+        state.pendingTrack?.let { track ->
+            viewModel.onPlayerNavigationHandled()
 
-    // 14.2. Отмена текущего поискового запроса
-    private fun cancelCurrentSearch() {
-        searchGeneration++
-        currentSearchTask?.cancel()
-        currentSearchTask = null
-    }
-
-    // 15. Управление результатами поиска
-    private fun clearSearchResults() {
-        loadingContainer.isVisible = false
-        trackAdapter.updateTracks(emptyList())
-        tracksRecyclerView.isVisible = false
-        historyContainer.isVisible = false
-        emptyState.isVisible = false
-        errorState.isVisible = false
-    }
-
-    private fun showSearchResults(tracks: List<Track>) {
-        trackAdapter.updateTracks(tracks)
-        historyContainer.isVisible = false
-        errorState.isVisible = false
-        if (tracks.isEmpty()) {
-            tracksRecyclerView.isVisible = false
-            emptyState.isVisible = true
-
-        } else {
-            tracksRecyclerView.isVisible = true
-            emptyState.isVisible = false
+            val intent = AudioPlayerActivity.Companion.createIntent(this, track)
+            startActivity(intent)
         }
     }
 
-    private fun showSearchError() {
-        trackAdapter.updateTracks(emptyList())
-        historyContainer.isVisible = false
-        tracksRecyclerView.isVisible = false
-        emptyState.isVisible = false
-        errorState.isVisible = true
-    }
+    // 15. Отображение результатов и истории выполняется в render()
 
     // 16. Сохранение состояния экрана
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(
+            SEARCH_TEXT,
+            searchEditText.text.toString()
+        )
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT, searchText)
-        outState.putString(LAST_SEARCH_QUERY, lastSearchQuery)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        searchText = savedInstanceState.getString(SEARCH_TEXT, "")
-        lastSearchQuery = savedInstanceState.getString(LAST_SEARCH_QUERY, "")
-
-        searchEditText.setText(searchText)
     }
 
     // 16.1. Возобновление работы экрана
     override fun onResume() {
         super.onResume()
-        isScreenResumed = true
-        isPlayerOpening = false
-
-        if (resumePendingSearch) {
-            resumePendingSearch = false
-            searchDebounce()
-        }
+        viewModel.onScreenResumed()
     }
 
     // 16.2. Приостановка работы экрана
     override fun onPause() {
-        isScreenResumed = false
-
-        resumePendingSearch = !isFinishing &&
-                searchText.isNotBlank() &&
-                (resumePendingSearch || isSearchPending || currentSearchTask != null)
-
-        handler.removeCallbacks(searchRunnable)
-        isSearchPending = false
-
-        cancelCurrentSearch()
-        loadingContainer.isVisible = false
-
+        viewModel.onScreenPaused(isFinishing)
         super.onPause()
     }
 
-    // 17. Завершение работы экрана
-    override fun onDestroy() {
-        handler.removeCallbacks(searchRunnable)
-        cancelCurrentSearch()
-        super.onDestroy()
-    }
+    // 17. Освобождение ресурсов выполняется в SearchViewModel.onCleared()
 
     // 18. Константы
     companion object {
         private const val SEARCH_TEXT = "SEARCH_TEXT"
-        private const val LAST_SEARCH_QUERY = "LAST_SEARCH_QUERY"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val TRACK_CLICK_DEBOUNCE_DELAY = 1000L
-
     }
 }

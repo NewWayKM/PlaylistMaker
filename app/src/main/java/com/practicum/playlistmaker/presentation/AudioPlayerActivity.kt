@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -14,43 +12,30 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.content.IntentCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.PlayerInteractor
-import com.practicum.playlistmaker.domain.models.PlayerSnapshot
 import com.practicum.playlistmaker.domain.models.PlayerState
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.model.TrackParcel
+import com.practicum.playlistmaker.presentation.state.PlayerScreenState
 import com.practicum.playlistmaker.presentation.util.TrackCoverFormatter
 import com.practicum.playlistmaker.presentation.util.TrackDurationFormatter
 import com.practicum.playlistmaker.presentation.util.TrackReleaseYearFormatter
+import com.practicum.playlistmaker.presentation.viewmodel.AudioPlayerViewModel
+import com.practicum.playlistmaker.presentation.viewmodel.AudioPlayerViewModelFactory
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     // 1. Данные выбранного трека
     private var currentTrack: Track? = null
 
-    // 1.1. Управление плеером через Domain
-    private lateinit var playerInteractor: PlayerInteractor
+    // 1.1. Управление плеером через ViewModel
+    private lateinit var viewModel: AudioPlayerViewModel
     private lateinit var playButton: ImageButton
 
     // 1.2. Отображение текущего времени воспроизведения
     private lateinit var progressTime: TextView
-    private val progressHandler = Handler(Looper.getMainLooper())
-
-    private val progressRunnable = object : Runnable {
-        override fun run() {
-            val snapshot = playerInteractor.snapshot()
-
-            if (snapshot.state == PlayerState.PLAYING) {
-                progressTime.text =
-                    TrackDurationFormatter.format(snapshot.positionMillis)
-
-                progressHandler.postDelayed(this, PROGRESS_UPDATE_DELAY)
-            }
-        }
-    }
 
     // 2. Создание экрана
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +52,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         // 2.2. Подключение интерфейса
         setContentView(R.layout.activity_audio_player)
 
-        // 2.2.1. Создание интерактора аудиоплеера
-        playerInteractor = Creator.createPlayerInteractor()
+        // 2.2.1. Создание ViewModel через ViewModelProvider
+        viewModel = ViewModelProvider(
+            this,
+            AudioPlayerViewModelFactory(requireNotNull(currentTrack))
+        )[AudioPlayerViewModel::class.java]
 
         // 2.3. Настройка экрана
         setupSystemBars()
@@ -84,7 +72,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         showTrackCountry()
         setupProgressTime()
         setupPlayButton()
-        preparePlayer()
+
+        // 2.5. Подписка на состояние плеера
+        viewModel.state.observe(this) { state ->
+            render(state)
+        }
     }
 
     // 3. Получение данных выбранного трека
@@ -214,26 +206,16 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
 
-    // 5.8. Подготовка аудиоплеера
-    private fun preparePlayer() {
-        // 5.8.1. Подписка на изменения состояния
-        playerInteractor.setListener { snapshot ->
-            updatePlayerState(snapshot)
-        }
+    // 5.8. Отображение состояния аудиоплеера из LiveData
+    private fun render(state: PlayerScreenState) {
 
-        // 5.8.2. Передача выбранного трека
-        currentTrack?.let { track ->
-            playerInteractor.prepare(track)
-        }
-    }
+        val playback = state.playback
 
-    // 5.8.3. Обновление интерфейса по состоянию плеера
-    private fun updatePlayerState(snapshot: PlayerSnapshot) {
+        // 5.8.1. Текущее состояние воспроизведения
+        val playerState = playback.state
 
-        val state = snapshot.state
-
-        // 5.8.4. Доступность кнопки воспроизведения
-        playButton.isEnabled = when (state) {
+        // 5.8.2. Доступность кнопки воспроизведения
+        playButton.isEnabled = when (playerState) {
             PlayerState.PREPARED,
             PlayerState.PLAYING,
             PlayerState.PAUSED,
@@ -242,28 +224,21 @@ class AudioPlayerActivity : AppCompatActivity() {
             else -> false
         }
 
-        // 5.8.5. Обновление изображения Play/Pause
-        updatePlayButton()
+        // 5.8.3. Обновление изображения Play/Pause
+        updatePlayButton(playerState == PlayerState.PLAYING)
 
-        // 5.8.6. Обновление времени
-        when (state) {
-            PlayerState.PLAYING -> startProgressUpdate()
+        // 5.8.4. Обновление времени воспроизведения
+        progressTime.text = TrackDurationFormatter.format(
+            when (playerState) {
+                PlayerState.IDLE,
+                PlayerState.COMPLETED,
+                PlayerState.ERROR,
+                PlayerState.RELEASED -> 0L
 
-            PlayerState.PAUSED -> {
-                stopProgressUpdate()
-                progressTime.text =
-                    TrackDurationFormatter.format(snapshot.positionMillis)
+                else -> playback.positionMillis
             }
-
-            PlayerState.COMPLETED,
-            PlayerState.IDLE,
-            PlayerState.ERROR,
-            PlayerState.RELEASED -> resetProgressTime()
-
-            else -> stopProgressUpdate()
-        }
+        )
     }
-
 
     // 5.9. Настройка кнопки воспроизведения
     private fun setupPlayButton() {
@@ -271,22 +246,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         playButton.isEnabled = false
 
         playButton.setOnClickListener {
-            togglePlayback()
+            viewModel.onPlaybackClicked()
         }
 
-        updatePlayButton()
+        updatePlayButton(false)
     }
 
-    // 5.10. Переключение воспроизведения и паузы
-    private fun togglePlayback() {
-        playerInteractor.togglePlayback()
-    }
-
+    // 5.10. (---)
     // 5.11. Обновление изображения кнопки
-    private fun updatePlayButton() {
-
-        val isPlaying =
-            playerInteractor.snapshot().state == PlayerState.PLAYING
+    private fun updatePlayButton(isPlaying: Boolean) {
 
         playButton.setImageResource(
             if (isPlaying) {
@@ -311,45 +279,30 @@ class AudioPlayerActivity : AppCompatActivity() {
         progressTime.text = TrackDurationFormatter.format(0L)
     }
 
-    // 5.13. Запуск обновления времени
-    private fun startProgressUpdate() {
-        progressHandler.removeCallbacks(progressRunnable)
-        progressRunnable.run()
-    }
-
-    // 5.14. Остановка обновления времени
-    private fun stopProgressUpdate() {
-        progressHandler.removeCallbacks(progressRunnable)
-    }
-
-    // 5.15. Сброс времени воспроизведения
-    private fun resetProgressTime() {
-        stopProgressUpdate()
-        progressTime.text = TrackDurationFormatter.format(0L)
-    }
-
+    // 5.13. (---)
+    // 5.14. (---)
+    // 5.15. (---)
     // 5.16. Приостановка при уходе приложения в фон
     override fun onPause() {
-        playerInteractor.pause()
-        stopProgressUpdate()
+        if (::viewModel.isInitialized) {
+            viewModel.onScreenPaused()
+        }
         super.onPause()
     }
 
-    // 5.17. Освобождение ресурсов аудиоплеера
-    override fun onDestroy() {
-        stopProgressUpdate()
-
-        playerInteractor.setListener(null)
-        playerInteractor.release()
-
-        super.onDestroy()
+    // 5.17. Возобновление работы аудиоплеера
+    override fun onResume() {
+        super.onResume()
+        if (::viewModel.isInitialized) {
+            viewModel.onScreenResumed()
+        }
     }
+// Освобождение ресурсов выполняется в AudioPlayerViewModel.onCleared()
 
     // 6. Создание Intent для открытия аудиоплеера
     companion object {
 
         private const val EXTRA_TRACK = "extra_track"
-        private const val PROGRESS_UPDATE_DELAY = 300L
 
         fun createIntent(context: Context, track: Track): Intent {
             return Intent(context, AudioPlayerActivity::class.java).apply {

@@ -12,25 +12,32 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.SettingsInteractor
-import com.practicum.playlistmaker.domain.api.SharingInteractor
+import com.practicum.playlistmaker.presentation.state.SettingsAction
+import com.practicum.playlistmaker.presentation.state.SettingsScreenState
+import com.practicum.playlistmaker.presentation.viewmodel.SettingsViewModel
+import com.practicum.playlistmaker.presentation.viewmodel.SettingsViewModelFactory
 
 class SettingsActivity : AppCompatActivity() {
 
-    // 1. Интеракторы экрана настроек
-    private lateinit var settingsInteractor: SettingsInteractor
-    private lateinit var sharingInteractor: SharingInteractor
+    // 1. ViewModel экрана настроек
+    private lateinit var viewModel: SettingsViewModel
+
+    // 1.1. Переключатель темы и защита от повторной обработки
+    private lateinit var darkThemeSwitch: SwitchMaterial
+    private var isRenderingTheme = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // 2. Получение зависимостей через Creator
-        settingsInteractor = Creator.provideSettingsInteractor()
-        sharingInteractor = Creator.provideSharingInteractor()
+        // 2. Создание ViewModel через ViewModelProvider
+        viewModel = ViewModelProvider(
+            this,
+            SettingsViewModelFactory()
+        )[SettingsViewModel::class.java]
 
         val settingsRoot = findViewById<View>(R.id.settingsRoot)
 
@@ -58,86 +65,126 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        val darkThemeSwitch =
+        // 3. Получение переключателя темы
+        darkThemeSwitch =
             findViewById<SwitchMaterial>(R.id.darkThemeSwitch)
 
-        // 3. Определение системной темы
-        val systemDark = resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        // 3.1. Отключение автоматического восстановления состояния View
+        darkThemeSwitch.isSaveEnabled = false
 
-        // 3.1. Отображение сохранённой или системной темы
-        darkThemeSwitch.isChecked =
-            settingsInteractor.read().darkTheme ?: systemDark
-
-        // 3.2. Сохранение и применение выбранной темы
+        // 3.2. Передача выбора пользователя во ViewModel
         darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settingsInteractor.setDarkTheme(isChecked)
-
-            AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) {
-                    AppCompatDelegate.MODE_NIGHT_YES
-                } else {
-                    AppCompatDelegate.MODE_NIGHT_NO
-                }
-            )
+            if (!isRenderingTheme) {
+                viewModel.onThemeChanged(isChecked)
+            }
         }
 
         val shareAppRow = findViewById<View>(R.id.shareAppRow)
 
         shareAppRow.setOnClickListener {
-
-            val sharingData = sharingInteractor.read()
-
-            val shareIntent = Intent(Intent.ACTION_SEND)
-
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                sharingData.appLink
-            )
-
-            startExternalActivity(Intent.createChooser(shareIntent, null))
+            viewModel.onShareClicked()
         }
 
         val supportRow = findViewById<View>(R.id.supportRow)
 
         supportRow.setOnClickListener {
-            // 3.3. Получение данных поддержки через интерактор
-            val sharingData = sharingInteractor.read()
-
-            // 3.4. Создание Intent для электронной почты
-            val supportIntent = Intent(Intent.ACTION_SENDTO)
-
-            supportIntent.data =
-                "mailto:${sharingData.supportEmail}".toUri()
-
-            supportIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                sharingData.supportSubject
-            )
-
-            supportIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                sharingData.supportBody
-            )
-
-            // 3.5. Открытие почтового приложения
-            startExternalActivity(supportIntent)
+            viewModel.onSupportClicked()
         }
 
         val userAgreementRow = findViewById<View>(R.id.userAgreementRow)
 
         userAgreementRow.setOnClickListener {
-            val sharingData = sharingInteractor.read()
-
-            val agreementIntent = Intent(
-                Intent.ACTION_VIEW,
-                sharingData.agreementUrl.toUri()
-            )
-
-            startExternalActivity(agreementIntent)
+            viewModel.onAgreementClicked()
         }
 
+        // 3.3. Подписка на состояние экрана настроек
+        viewModel.state.observe(this) { state ->
+            render(state)
+        }
+    }
+
+    // 3.4. Отображение состояния, полученного из ViewModel
+    private fun render(state: SettingsScreenState) {
+
+        // 3.4.1. Определение системной темы
+        val systemDark = resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        // 3.4.2. Обновление переключателя без повторного сохранения
+        isRenderingTheme = true
+        darkThemeSwitch.isChecked = state.darkTheme ?: systemDark
+        isRenderingTheme = false
+
+        // 3.4.3. Применение выбранной темы
+        val mode = when (state.darkTheme) {
+            true -> AppCompatDelegate.MODE_NIGHT_YES
+            false -> AppCompatDelegate.MODE_NIGHT_NO
+            null -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+
+        if (AppCompatDelegate.getDefaultNightMode() != mode) {
+            AppCompatDelegate.setDefaultNightMode(mode)
+        }
+
+        // 3.4.4. Выполнение внешнего действия
+        state.pendingAction?.let { action ->
+            viewModel.onExternalActionHandled()
+            openExternalAction(action)
+        }
+    }
+
+    // 3.5. Открытие внешних приложений
+    private fun openExternalAction(action: SettingsAction) {
+
+        when (action) {
+
+            // 3.5.1. Поделиться приложением
+            is SettingsAction.Share -> {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    action.appLink
+                )
+
+                startExternalActivity(Intent.createChooser(shareIntent, null))
+            }
+
+            // 3.5.2. Написать в поддержку
+            is SettingsAction.Support -> {
+                val sharingData = action.data
+
+                // Создание Intent для электронной почты
+                val supportIntent = Intent(Intent.ACTION_SENDTO)
+
+                supportIntent.data =
+                    "mailto:${sharingData.supportEmail}".toUri()
+
+                supportIntent.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    sharingData.supportSubject
+                )
+
+                supportIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    sharingData.supportBody
+                )
+
+                // Открытие почтового приложения
+                startExternalActivity(supportIntent)
+            }
+
+            // 3.5.3. Пользовательское соглашение
+            is SettingsAction.Agreement -> {
+                val agreementIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    action.url.toUri()
+                )
+
+                startExternalActivity(agreementIntent)
+            }
+        }
     }
 
     // 4. Безопасное открытие внешнего приложения

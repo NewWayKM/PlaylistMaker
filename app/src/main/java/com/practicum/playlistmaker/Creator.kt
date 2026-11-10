@@ -3,9 +3,9 @@ package com.practicum.playlistmaker
 import android.content.Context
 import com.google.gson.Gson
 import com.practicum.playlistmaker.data.local.HistoryLocalStorage
+import com.practicum.playlistmaker.data.local.PreferencesProvider
 import com.practicum.playlistmaker.data.local.SettingsLocalStorage
 import com.practicum.playlistmaker.data.local.SharingLocalStorage
-import com.practicum.playlistmaker.data.local.StorageKeys
 import com.practicum.playlistmaker.data.network.ITunesNetworkClient
 import com.practicum.playlistmaker.data.player.MediaPlayerDataSource
 import com.practicum.playlistmaker.data.repository.HistoryRepositoryImpl
@@ -38,17 +38,13 @@ object Creator {
     }
 
     // 3. Общие зависимости
-
     // 3.1. SharedPreferences
     private val preferences by lazy {
         check(::appContext.isInitialized) {
-            "Ошибка: необходимо вызвать   Creator.init() в App"
+            "Ошибка: необходимо вызвать Creator.init() в App"
         }
 
-        appContext.getSharedPreferences(
-            StorageKeys.PREFERENCES_NAME,
-            Context.MODE_PRIVATE
-        )
+        PreferencesProvider.create(appContext)
     }
 
     // 3.2. Gson
@@ -96,7 +92,6 @@ object Creator {
     }
 
     // 6. Предоставление интеракторов экранам
-
     // 6.1. Получение интерактора поиска
     fun provideTracksInteractor(): TracksInteractor {
         return tracksInteractor
