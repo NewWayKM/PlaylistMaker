@@ -17,11 +17,6 @@ data class SearchScreenState(
     val content: SearchContent = SearchContent.Idle,
     val history: List<Track> = emptyList(),
     val isInputFocused: Boolean = true,
-    val pendingTrack: Track? = null
-) {
-
-    // 2.1. Отображение истории при пустом поле поиска
-    val showHistory: Boolean
-        get() = query.isEmpty() && isInputFocused &&
-                content == SearchContent.Idle && history.isNotEmpty()
-}
+    val pendingTrack: Track? = null,
+    val showHistory: Boolean = false
+)

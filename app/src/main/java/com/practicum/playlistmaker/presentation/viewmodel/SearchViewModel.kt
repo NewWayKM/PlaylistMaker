@@ -26,13 +26,30 @@ class SearchViewModel(
         SearchScreenState(
             query = initialQuery,
             history = historyInteractor.read().toList()
-        )
+        ).let { initialState ->
+            initialState.copy(
+                showHistory = initialState.query.isEmpty() &&
+                        initialState.isInputFocused &&
+                        initialState.content == SearchContent.Idle &&
+                        initialState.history.isNotEmpty()
+            )
+        }
     )
 
     val state: LiveData<SearchScreenState> = mutableState
 
     private val currentState: SearchScreenState
         get() = requireNotNull(mutableState.value)
+
+    // 2.1 Вычисление признака отображения истории во ViewModel
+    private fun updateState(newState: SearchScreenState) {
+        val showHistory = newState.query.isEmpty() &&
+                newState.isInputFocused &&
+                newState.content == SearchContent.Idle &&
+                newState.history.isNotEmpty()
+
+        mutableState.value = newState.copy(showHistory = showHistory)
+    }
 
     // 3. Управление отложенным поиском
     private val handler = Handler(Looper.getMainLooper())
@@ -71,9 +88,11 @@ class SearchViewModel(
             lastSearchQuery = ""
         }
 
-        mutableState.value = currentState.copy(
-            query = query,
-            content = SearchContent.Idle
+        updateState(
+            currentState.copy(
+                query = query,
+                content = SearchContent.Idle
+            )
         )
 
         if (query.isNotBlank()) {
@@ -88,17 +107,21 @@ class SearchViewModel(
         cancelCurrentSearch()
         lastSearchQuery = ""
 
-        mutableState.value = currentState.copy(
-            query = "",
-            content = SearchContent.Idle
+        updateState(
+            currentState.copy(
+                query = "",
+                content = SearchContent.Idle
+            )
         )
     }
 
     // 4.2. Изменение фокуса поля ввода
     fun onInputFocusChanged(hasFocus: Boolean) {
         if (currentState.isInputFocused != hasFocus) {
-            mutableState.value = currentState.copy(
-                isInputFocused = hasFocus
+            updateState(
+                currentState.copy(
+                    isInputFocused = hasFocus
+                )
             )
         }
     }
@@ -123,8 +146,10 @@ class SearchViewModel(
     fun onClearHistoryClicked() {
         historyInteractor.clear()
 
-        mutableState.value = currentState.copy(
-            history = emptyList()
+        updateState(
+            currentState.copy(
+                history = emptyList()
+            )
         )
     }
 
@@ -146,17 +171,21 @@ class SearchViewModel(
 
         historyInteractor.add(track)
 
-        mutableState.value = currentState.copy(
-            history = historyInteractor.read().toList(),
-            pendingTrack = track
+        updateState(
+            currentState.copy(
+                history = historyInteractor.read().toList(),
+                pendingTrack = track
+            )
         )
     }
 
     // 6.2. Подтверждение перехода в плеер
     fun onPlayerNavigationHandled() {
         if (currentState.pendingTrack != null) {
-            mutableState.value = currentState.copy(
-                pendingTrack = null
+            updateState(
+                currentState.copy(
+                    pendingTrack = null
+                )
             )
         }
     }
@@ -186,8 +215,10 @@ class SearchViewModel(
         cancelCurrentSearch()
 
         if (currentState.content == SearchContent.Loading) {
-            mutableState.value = currentState.copy(
-                content = SearchContent.Idle
+            updateState(
+                currentState.copy(
+                    content = SearchContent.Idle
+                )
             )
         }
     }
@@ -226,8 +257,10 @@ class SearchViewModel(
 
         lastSearchQuery = query.trim()
 
-        mutableState.value = currentState.copy(
-            content = SearchContent.Loading
+        updateState(
+            currentState.copy(
+                content = SearchContent.Loading
+            )
         )
 
         val generation = searchGeneration
@@ -254,8 +287,10 @@ class SearchViewModel(
                 SearchResult.Error -> SearchContent.Error
             }
 
-            mutableState.value = currentState.copy(
-                content = content
+            updateState(
+                currentState.copy(
+                    content = content
+                )
             )
         }
 
