@@ -53,4 +53,6 @@ dependencies {
     // Компоненты MVVM для спринта 16
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.livedata)
+    // Внедрение зависимостей для спринта 17
+    implementation(libs.koin.android)
 }

@@ -10,7 +10,8 @@ import java.io.IOException
 
 // 1. Управление MediaPlayer внутри слоя Data
 class MediaPlayerDataSource(
-    private val playerFactory: () -> MediaPlayer = { MediaPlayer() }
+    private val playerFactory: () -> MediaPlayer,
+    private val audioAttributes: AudioAttributes
 ) {
 
     // 1.1. Экземпляр плеера и его состояние
@@ -33,7 +34,7 @@ class MediaPlayerDataSource(
         }
 
         try {
-            // 2.1. Создание нового MediaPlayer
+            // 2.1. Получение нового MediaPlayer
             val newPlayer = playerFactory()
             player = newPlayer
 
@@ -69,12 +70,7 @@ class MediaPlayerDataSource(
             // 2.5. Настройка источника и параметров аудио
             newPlayer.setDataSource(url)
 
-            newPlayer.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
-            )
+            newPlayer.setAudioAttributes(audioAttributes)
 
             state = PlayerStateDto.PREPARING
             publish()

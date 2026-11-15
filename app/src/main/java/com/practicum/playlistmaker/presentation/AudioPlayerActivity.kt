@@ -12,7 +12,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.content.IntentCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.models.PlayerState
@@ -23,7 +22,8 @@ import com.practicum.playlistmaker.presentation.util.TrackCoverFormatter
 import com.practicum.playlistmaker.presentation.util.TrackDurationFormatter
 import com.practicum.playlistmaker.presentation.util.TrackReleaseYearFormatter
 import com.practicum.playlistmaker.presentation.viewmodel.AudioPlayerViewModel
-import com.practicum.playlistmaker.presentation.viewmodel.AudioPlayerViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -31,7 +31,9 @@ class AudioPlayerActivity : AppCompatActivity() {
     private var currentTrack: Track? = null
 
     // 1.1. Управление плеером через ViewModel
-    private lateinit var viewModel: AudioPlayerViewModel
+    private val viewModel: AudioPlayerViewModel by viewModel {
+        parametersOf(requireNotNull(currentTrack))
+    }
     private lateinit var playButton: ImageButton
 
     // 1.2. Отображение текущего времени воспроизведения
@@ -52,12 +54,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         // 2.2. Подключение интерфейса
         setContentView(R.layout.activity_audio_player)
 
-        // 2.2.1. Создание ViewModel через ViewModelProvider
-        viewModel = ViewModelProvider(
-            this,
-            AudioPlayerViewModelFactory(requireNotNull(currentTrack))
-        )[AudioPlayerViewModel::class.java]
-
+        // 2.2.1. (---)
         // 2.3. Настройка экрана
         setupSystemBars()
         setupBackButton()
@@ -284,7 +281,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     // 5.15. (---)
     // 5.16. Приостановка при уходе приложения в фон
     override fun onPause() {
-        if (::viewModel.isInitialized) {
+        if (currentTrack != null) {
             viewModel.onScreenPaused()
         }
         super.onPause()
@@ -293,7 +290,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     // 5.17. Возобновление работы аудиоплеера
     override fun onResume() {
         super.onResume()
-        if (::viewModel.isInitialized) {
+        if (currentTrack != null) {
             viewModel.onScreenResumed()
         }
     }
