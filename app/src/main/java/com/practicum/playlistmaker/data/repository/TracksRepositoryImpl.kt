@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.data.repository
 
 import android.os.Handler
-import android.os.Looper
 import com.practicum.playlistmaker.data.dto.TrackSearchResponseDto
 import com.practicum.playlistmaker.data.mapper.TrackMapper
 import com.practicum.playlistmaker.data.network.ITunesApiService
@@ -16,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 // 1. Реализация поиска треков через iTunes API
 class TracksRepositoryImpl(
     private val api: ITunesApiService,
-    private val callbackHandler: Handler = Handler(Looper.getMainLooper())
+    private val callbackHandler: Handler
 ) : TracksRepository {
 
     // 2. Выполнение асинхронного поиска

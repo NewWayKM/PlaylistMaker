@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -20,11 +19,16 @@ import com.practicum.playlistmaker.presentation.adapter.TrackAdapter
 import com.practicum.playlistmaker.presentation.state.SearchContent
 import com.practicum.playlistmaker.presentation.state.SearchScreenState
 import com.practicum.playlistmaker.presentation.viewmodel.SearchViewModel
-import com.practicum.playlistmaker.presentation.viewmodel.SearchViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SearchActivity : AppCompatActivity() {
     // 1. ViewModel экрана поиска
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel {
+        parametersOf(savedInstanceStateQuery)
+    }
+
+    private var savedInstanceStateQuery = ""
 
     // 1.1. Защита от повторной обработки программного изменения текста
     private var isRenderingQuery = false
@@ -55,11 +59,9 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        // 4.1. Создание ViewModel через ViewModelProvider
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModelFactory(savedInstanceState?.getString(SEARCH_TEXT).orEmpty())
-        )[SearchViewModel::class.java]
+        // 4.1. Восстановление поискового запроса для ViewModel
+        savedInstanceStateQuery =
+            savedInstanceState?.getString(SEARCH_TEXT).orEmpty()
 
         initViews()
         setupRecyclerViews()

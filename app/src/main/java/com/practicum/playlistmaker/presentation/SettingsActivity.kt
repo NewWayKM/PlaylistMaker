@@ -12,18 +12,16 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.presentation.state.SettingsAction
 import com.practicum.playlistmaker.presentation.state.SettingsScreenState
 import com.practicum.playlistmaker.presentation.viewmodel.SettingsViewModel
-import com.practicum.playlistmaker.presentation.viewmodel.SettingsViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-
     // 1. ViewModel экрана настроек
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     // 1.1. Переключатель темы и защита от повторной обработки
     private lateinit var darkThemeSwitch: SwitchMaterial
@@ -33,11 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // 2. Создание ViewModel через ViewModelProvider
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModelFactory()
-        )[SettingsViewModel::class.java]
+        // 2. (---)
 
         val settingsRoot = findViewById<View>(R.id.settingsRoot)
 
